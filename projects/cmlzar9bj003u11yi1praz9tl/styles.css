@@ -1,0 +1,180 @@
+:root {
+    --ios-bg-color: #F2F2F7;
+    --ios-card-bg: #FFFFFF;
+    --ios-text: #000000;
+    --ios-blue: #007AFF;
+    --ios-destructive: #FF3B30;
+    --ios-separator: #C6C6C8;
+    --safe-area-top: env(safe-area-inset-top);
+    --safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--ios-bg-color);
+    color: var(--ios-text);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: var(--safe-area-top);
+    padding-bottom: calc(20px + var(--safe-area-bottom));
+}
+
+header {
+    padding: 20px 16px 10px 16px;
+    background-color: var(--ios-bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0 16px;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.todo-item {
+    background-color: var(--ios-card-bg);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    min-height: 44px;
+    transition: background-color 0.2s;
+}
+
+.todo-item:active {
+    background-color: #E5E5EA;
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: #8E8E93;
+}
+
+.todo-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+/* Custom Checkbox */
+.checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--ios-blue);
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.todo-item.completed .checkbox {
+    background-color: var(--ios-blue);
+}
+
+.checkmark {
+    display: none;
+    width: 12px;
+    height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg);
+    margin-top: -2px;
+}
+
+.todo-item.completed .checkmark {
+    display: block;
+}
+
+.todo-text {
+    font-size: 17px;
+    flex: 1;
+    word-break: break-word;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--ios-blue); /* Subtle until active usually, but consistent here */
+    font-size: 17px;
+    padding: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.delete-btn:active {
+    color: var(--ios-destructive);
+}
+
+.input-area {
+    background-color: var(--ios-card-bg);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+#todo-input {
+    flex: 1;
+    border: none;
+    background-color: rgba(118, 118, 128, 0.12);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 17px;
+    outline: none;
+    margin-right: 10px;
+    height: 36px;
+}
+
+button[type="submit"] {
+    background-color: var(--ios-blue);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding-bottom: 2px;
+}
+
+button[type="submit"]:active {
+    opacity: 0.8;
+}

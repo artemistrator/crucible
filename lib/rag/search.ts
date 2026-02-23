@@ -1,7 +1,7 @@
 import { embed } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { prisma } from "@/lib/prisma";
-import { generateEmbedding, cosineSimilarity } from "@/lib/ai/embeddings";
+import { generateEmbedding } from "@/lib/ai/embeddings";
 
 export type RagChunk = {
   content: string;
@@ -110,35 +110,40 @@ export async function searchGlobalInsights(
     }));
   }
 
-  const allWithEmbedding = await prisma.globalInsight.findMany({
-    where: { embedding: { not: null } },
-    select: { id: true, title: true, category: true, recommendation: true, content: true, embedding: true },
-  });
+  const vectorQueryString = `[${queryVector.join(",")}]`;
 
-  const scored: Array<{ insight: (typeof allWithEmbedding)[0]; score: number }> = [];
-  for (const insight of allWithEmbedding) {
-    if (!insight.embedding) continue;
-    let vec: number[];
-    try {
-      vec = JSON.parse(insight.embedding) as number[];
-    } catch {
-      continue;
-    }
-    const score = cosineSimilarity(queryVector, vec);
-    scored.push({ insight, score });
-  }
+  type Row = {
+    title: string | null;
+    category: string | null;
+    recommendation: string | null;
+    content: string | null;
+    similarity: number;
+  };
 
-  const top = scored
-    .filter((s) => s.score > 0.5)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
+  const rows = await prisma.$queryRawUnsafe<Row[]>(
+    `
+      SELECT
+        title,
+        category,
+        recommendation,
+        content,
+        1 - (embedding <=> $1::vector) AS "similarity"
+      FROM "GlobalInsight"
+      WHERE embedding IS NOT NULL
+        AND 1 - (embedding <=> $1::vector) > 0.5
+      ORDER BY "similarity" DESC
+      LIMIT $2;
+    `,
+    vectorQueryString,
+    limit
+  );
 
-  return top.map(({ insight, score }) => ({
-    title: insight.title,
-    category: insight.category,
-    recommendation: insight.recommendation,
-    content: insight.content,
-    similarity: score,
+  return rows.map((r) => ({
+    title: r.title,
+    category: r.category,
+    recommendation: r.recommendation,
+    content: r.content ?? undefined,
+    similarity: r.similarity,
   }));
 }
 

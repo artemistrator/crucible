@@ -1,1 +1,0 @@
-self.__RSC_SERVER_MANIFEST="{\"node\":{\"00015d1fe28637d6ef0f8989f76954d2e93fa9b617\":{\"workers\":{\"app/page\":{\"moduleId\":\"55703\",\"async\":false}},\"layer\":{\"app/page\":\"action-browser\"},\"filename\":\"app/actions/get-completed-projects.ts\",\"exportedName\":\"getCompletedProjects\"}},\"edge\":{},\"encryptionKey\":\"process.env.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY\"}"

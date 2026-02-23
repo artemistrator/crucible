@@ -1,0 +1,1 @@
+node -e "const fs = require('fs'); const content = fs.readFileSync('./app.js', 'utf8'); if(content.includes('localStorage') && content.includes('getItem') && content.includes('setItem')) { console.log('LS Implementation Verified'); } else { process.exit(1); }"
