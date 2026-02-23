@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз Погоды</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Прогноз Погоды</h1>
+        <div class="search-box">
+            <input type="text" id="city-input" placeholder="Введите город (например, Москва)">
+            <button id="search-btn">Поиск</button>
+        </div>
+
+        <!-- Loader -->
+        <div class="loader" id="loader"></div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="error-message"></div>
+
+        <!-- Weather Card -->
+        <div class="weather-card" id="weather-card">
+            <h2 id="city-name">Город</h2>
+            <div class="temperature">
+                <span id="temp-value">--</span>°C
+            </div>
+            <div class="details">
+                <p id="weather-desc">Ожидание данных...</p>
+                <p id="wind-speed">Ветер: -- км/ч</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+services:
+  app:
+    build:
+      context: .
+      target: builder
+    ports:
+      - "3002:3000"
+    command: sh -c "npm install && npx prisma generate && npm run dev"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgresql://orchestrator:orchestrator@db:5432/orchestrator"
+      PRISMA_CLI_BINARY_TARGETS: "linux-musl-arm64-openssl-3.0.x"
+      NODE_ENV: "development"
+      HOSTNAME: "0.0.0.0"
+      INTERNAL_APP_URL: "http://app:3000"
+    volumes:
+      - ./:/app
+      - /app/.next        # анонимный volume — контейнер использует свою сборку
+      - app_node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_started
+      migration:
+        condition: service_completed_successfully
+
+  db:
+    image: pgvector/pgvector:pg16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: "orchestrator"
+      POSTGRES_USER: "orchestrator"
+      POSTGRES_PASSWORD: "orchestrator"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orchestrator -d orchestrator"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+
+  adminer:
+    image: adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  migration:
+    build:
+      context: .
+      target: migration
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgresql://orchestrator:orchestrator@db:5432/orchestrator"
+      PRISMA_CLI_BINARY_TARGETS: "linux-musl-arm64-openssl-3.0.x"
+    # If DB already has FRONTEND enum, run rename migration first; then db push (creates schema on empty DB or syncs after rename)
+    command: sh -c "(npx prisma db execute --file ./prisma/migrations/20260221000000_rename_frontend_to_task_executor/migration.sql --schema ./prisma/schema.prisma) || true && npx prisma db push --accept-data-loss && npx prisma generate"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+  app_node_modules:
+

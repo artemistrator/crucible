@@ -1,0 +1,155 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.11kB done
+#1 DONE 0.0s
+
+#2 [app internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [app] resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 0.9s
+
+#4 [migration] docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#4 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 0.0s done
+#4 CACHED
+
+#5 [migration internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 0.5s
+
+#6 [migration internal] load .dockerignore
+#6 transferring context: 125B done
+#6 DONE 0.0s
+
+#7 [migration migration 1/6] FROM docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8
+#7 resolve docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8 0.0s done
+#7 DONE 0.0s
+
+#8 [migration internal] load build context
+#8 transferring context: 871B 0.0s done
+#8 DONE 0.0s
+
+#9 [migration migration 4/6] COPY package.json package-lock.json* ./
+#9 CACHED
+
+#10 [migration migration 5/6] RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+#10 CACHED
+
+#11 [migration migration 6/6] COPY prisma ./prisma/
+#11 CACHED
+
+#12 [app internal] load build context
+#12 transferring context: 8.26kB 0.0s done
+#12 DONE 0.0s
+
+#13 [app deps 5/5] RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+#13 CACHED
+
+#14 [app deps 4/5] COPY package.json package-lock.json* ./
+#14 CACHED
+
+#15 [app builder 3/7] RUN apk add --no-cache openssl libc6-compat
+#15 CACHED
+
+#16 [app migration 2/6] WORKDIR /app
+#16 CACHED
+
+#17 [app migration 3/6] RUN apk add --no-cache openssl libc6-compat
+#17 CACHED
+
+#18 [app builder 4/7] COPY --from=deps /app/node_modules ./node_modules
+#18 CACHED
+
+#19 [migration] exporting to image
+#19 exporting layers done
+#19 exporting manifest sha256:d2e066842dd72489be79c54d60cb3a2e4245333a92fd04b7a3012ccc9c312fe4 done
+#19 exporting config sha256:4aad735ddb60d7652b31e18f1bc9bd04ba1bf6e321490685c486f4aa8074e1d5 done
+#19 exporting attestation manifest sha256:d941aca5ea6ffc116ea37527acc960be6842160ca415099d92b2e850c9a4ed87 0.0s done
+#19 exporting manifest list sha256:c3fb51744238c70852cf23f21243f2d84a7ce6fc112c7c3227bebc500d6d5208 done
+#19 naming to docker.io/library/ai-orchestrator-migration:latest done
+#19 unpacking to docker.io/library/ai-orchestrator-migration:latest done
+#19 DONE 0.1s
+
+#20 [app builder 5/7] COPY . .
+#20 DONE 0.1s
+
+#21 [migration] resolving provenance for metadata file
+#21 DONE 0.0s
+
+#22 [app builder 6/7] RUN npx prisma generate
+#22 1.305 Environment variables loaded from .env
+#22 1.309 Prisma schema loaded from prisma/schema.prisma
+#22 4.072 
+#22 4.072 ✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 185ms
+#22 4.072 
+#22 4.072 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#22 4.072 
+#22 4.072 Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+#22 4.072 
+#22 4.276 npm notice
+#22 4.276 npm notice New major version of npm available! 10.8.2 -> 11.10.0
+#22 4.276 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.10.0
+#22 4.276 npm notice To update run: npm install -g npm@11.10.0
+#22 4.276 npm notice
+#22 DONE 4.3s
+
+#23 [app builder 7/7] RUN npm run build
+#23 0.555 
+#23 0.555 > ai-orchestrator@0.1.0 build
+#23 0.555 > next build
+#23 0.555 
+#23 1.349    ▲ Next.js 15.5.12
+#23 1.350    - Environments: .env
+#23 1.350 
+#23 1.383    Creating an optimized production build ...
+#23 19.46  ✓ Compiled successfully in 16.0s
+#23 19.46    Linting and checking validity of types ...
+#23 22.14 
+#23 22.14 ./components/InsightsModal.tsx
+#23 22.14 113:6  Warning: React Hook useEffect has missing dependencies: 'loadInsights' and 'open'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+#23 22.14 
+#23 22.14 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+#23 26.66 Failed to compile.
+#23 26.66 
+#23 26.66 ./app/api/mcp/sse/route.ts:64:33
+#23 26.66 Type error: Object literal may only specify known properties, and 'title' does not exist in type 'TaskDependencySelect<DefaultArgs>'.
+#23 26.66 
+#23 26.66 [0m [90m 62 |[39m           }[33m,[39m
+#23 26.66  [90m 63 |[39m           dependencies[33m:[39m {
+#23 26.66 [31m[1m>[22m[39m[90m 64 |[39m             select[33m:[39m { id[33m:[39m [36mtrue[39m[33m,[39m title[33m:[39m [36mtrue[39m[33m,[39m status[33m:[39m [36mtrue[39m }[33m,[39m
+#23 26.66  [90m    |[39m                                 [31m[1m^[22m[39m
+#23 26.66  [90m 65 |[39m           }[33m,[39m
+#23 26.66  [90m 66 |[39m         }[33m,[39m
+#23 26.66  [90m 67 |[39m       })[33m;[39m[0m
+#23 26.71 Next.js build worker exited with code: 1 and signal: null
+#23 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+------
+ > [app builder 7/7] RUN npm run build:
+26.66 Type error: Object literal may only specify known properties, and 'title' does not exist in type 'TaskDependencySelect<DefaultArgs>'.
+26.66 
+26.66 [0m [90m 62 |[39m           }[33m,[39m
+26.66  [90m 63 |[39m           dependencies[33m:[39m {
+26.66 [31m[1m>[22m[39m[90m 64 |[39m             select[33m:[39m { id[33m:[39m [36mtrue[39m[33m,[39m title[33m:[39m [36mtrue[39m[33m,[39m status[33m:[39m [36mtrue[39m }[33m,[39m
+26.66  [90m    |[39m                                 [31m[1m^[22m[39m
+26.66  [90m 65 |[39m           }[33m,[39m
+26.66  [90m 66 |[39m         }[33m,[39m
+26.66  [90m 67 |[39m       })[33m;[39m[0m
+26.71 Next.js build worker exited with code: 1 and signal: null
+------
+Dockerfile:23
+
+--------------------
+
+  21 |     COPY . .
+
+  22 |     RUN npx prisma generate
+
+  23 | >>> RUN npm run build
+
+  24 |     
+
+  25 |     FROM node:20-alpine AS runner
+
+--------------------
+
+target app: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Interface</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            font-family: sans-serif;
+        }
+        .button-group {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-group">
+        <button onclick="handleAccept()">Принять</button>
+        <button onclick="handleCancel()">Отмена</button>
+    </div>
+
+    <script>
+        function handleAccept() {
+            console.log("User clicked: Принять");
+        }
+        function handleCancel() {
+            console.log("User clicked: Отмена");
+        }
+    </script>
+</body>
+</html>

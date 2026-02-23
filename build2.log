@@ -1,0 +1,643 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.11kB done
+#1 DONE 0.0s
+
+#2 [app internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [app] resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 ...
+
+#4 [auth] docker/dockerfile:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#3 [app] resolve image config for docker-image://docker.io/docker/dockerfile:1
+#3 DONE 1.1s
+
+#5 [migration] docker-image://docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+#5 resolve docker.io/docker/dockerfile:1@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6 done
+#5 CACHED
+
+#6 [migration internal] load metadata for docker.io/library/node:20-alpine
+#6 ...
+
+#7 [auth] library/node:pull token for registry-1.docker.io
+#7 DONE 0.0s
+
+#6 [app internal] load metadata for docker.io/library/node:20-alpine
+#6 DONE 0.7s
+
+#8 [app internal] load .dockerignore
+#8 transferring context: 125B done
+#8 DONE 0.0s
+
+#9 [app deps 1/5] FROM docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8
+#9 resolve docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8 done
+#9 DONE 0.0s
+
+#10 [migration internal] load build context
+#10 transferring context: 871B 0.0s done
+#10 DONE 0.0s
+
+#11 [migration migration 5/6] RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+#11 CACHED
+
+#12 [migration migration 4/6] COPY package.json package-lock.json* ./
+#12 CACHED
+
+#13 [migration migration 6/6] COPY prisma ./prisma/
+#13 CACHED
+
+#14 [app internal] load build context
+#14 transferring context: 26.25kB 0.0s done
+#14 DONE 0.0s
+
+#15 [app deps 5/5] RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+#15 CACHED
+
+#16 [app deps 4/5] COPY package.json package-lock.json* ./
+#16 CACHED
+
+#17 [app deps 2/5] WORKDIR /app
+#17 CACHED
+
+#18 [app deps 3/5] RUN apk add --no-cache openssl libc6-compat
+#18 CACHED
+
+#19 [app builder 3/7] RUN apk add --no-cache openssl libc6-compat
+#19 CACHED
+
+#20 [app builder 4/7] COPY --from=deps /app/node_modules ./node_modules
+#20 CACHED
+
+#21 [migration] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:d2e066842dd72489be79c54d60cb3a2e4245333a92fd04b7a3012ccc9c312fe4 done
+#21 exporting config sha256:4aad735ddb60d7652b31e18f1bc9bd04ba1bf6e321490685c486f4aa8074e1d5 done
+#21 exporting attestation manifest sha256:9c0f9acfe87792ef543631dcb408bdcc0eb47848a7f601362e131f3b825121be
+#21 exporting attestation manifest sha256:9c0f9acfe87792ef543631dcb408bdcc0eb47848a7f601362e131f3b825121be 0.0s done
+#21 exporting manifest list sha256:2c11d3f83ced25efb34af19c99250bca00f09bea365f457a91f5059ec63bc721 done
+#21 naming to docker.io/library/ai-orchestrator-migration:latest done
+#21 unpacking to docker.io/library/ai-orchestrator-migration:latest done
+#21 DONE 0.1s
+
+#22 [app builder 5/7] COPY . .
+#22 DONE 0.1s
+
+#23 [migration] resolving provenance for metadata file
+#23 DONE 0.0s
+
+#24 [app builder 6/7] RUN npx prisma generate
+#24 1.086 Environment variables loaded from .env
+#24 1.091 Prisma schema loaded from prisma/schema.prisma
+#24 4.180 
+#24 4.180 ✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 170ms
+#24 4.180 
+#24 4.180 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#24 4.180 
+#24 4.180 Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+#24 4.180 
+#24 4.384 npm notice
+#24 4.384 npm notice New major version of npm available! 10.8.2 -> 11.10.0
+#24 4.384 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.10.0
+#24 4.384 npm notice To update run: npm install -g npm@11.10.0
+#24 4.384 npm notice
+#24 DONE 4.4s
+
+#25 [app builder 7/7] RUN npm run build
+#25 0.346 
+#25 0.346 > ai-orchestrator@0.1.0 build
+#25 0.346 > next build
+#25 0.346 
+#25 0.931    ▲ Next.js 15.5.12
+#25 0.931    - Environments: .env
+#25 0.931 
+#25 0.969    Creating an optimized production build ...
+#25 18.81  ✓ Compiled successfully in 15.7s
+#25 18.81    Linting and checking validity of types ...
+#25 21.37 
+#25 21.37 ./components/InsightsModal.tsx
+#25 21.37 113:6  Warning: React Hook useEffect has missing dependencies: 'loadInsights' and 'open'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+#25 21.37 
+#25 21.37 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+#25 25.87    Collecting page data ...
+#25 28.74    Generating static pages (0/24) ...
+#25 29.11    Generating static pages (6/24) 
+#25 29.11    Generating static pages (12/24) 
+#25 29.18    Generating static pages (18/24) 
+#25 29.40  ✓ Generating static pages (24/24)
+#25 30.94    Finalizing page optimization ...
+#25 30.94    Collecting build traces ...
+#25 47.77 
+#25 47.78 Route (app)                                 Size  First Load JS
+#25 47.78 ┌ ƒ /                                    5.26 kB         115 kB
+#25 47.78 ├ ƒ /_not-found                            996 B         103 kB
+#25 47.78 ├ ƒ /api/ai-agent/v1/actions               180 B         102 kB
+#25 47.78 ├ ƒ /api/billing                           180 B         102 kB
+#25 47.78 ├ ƒ /api/comments                          180 B         102 kB
+#25 47.78 ├ ƒ /api/decompose-idea                    180 B         102 kB
+#25 47.78 ├ ƒ /api/download-kit                      180 B         102 kB
+#25 47.78 ├ ƒ /api/generate-coding-prompt            180 B         102 kB
+#25 47.78 ├ ƒ /api/generate-tasks                    180 B         102 kB
+#25 47.78 ├ ƒ /api/ide                               180 B         102 kB
+#25 47.78 ├ ƒ /api/insights                          180 B         102 kB
+#25 47.78 ├ ƒ /api/mcp/messages                      180 B         102 kB
+#25 47.78 ├ ƒ /api/mcp/sse                           180 B         102 kB
+#25 47.78 ├ ƒ /api/mcp/tasks                         180 B         102 kB
+#25 47.78 ├ ƒ /api/metrics                           180 B         102 kB
+#25 47.78 ├ ƒ /api/plans                             180 B         102 kB
+#25 47.78 ├ ƒ /api/projects                          180 B         102 kB
+#25 47.78 ├ ƒ /api/projects/[id]                     180 B         102 kB
+#25 47.78 ├ ƒ /api/projects/[id]/billing             180 B         102 kB
+#25 47.78 ├ ƒ /api/sync                              180 B         102 kB
+#25 47.78 ├ ƒ /api/sync/command                      180 B         102 kB
+#25 47.78 ├ ƒ /api/tasks                             180 B         102 kB
+#25 47.78 ├ ƒ /api/tasks/[taskId]                    180 B         102 kB
+#25 47.78 ├ ƒ /api/tasks/[taskId]/approve            180 B         102 kB
+#25 47.78 ├ ƒ /api/test-llm                          180 B         102 kB
+#25 47.78 ├ ƒ /api/test-ping                         180 B         102 kB
+#25 47.78 ├ ƒ /api/upload                            180 B         102 kB
+#25 47.78 ├ ƒ /api/webhooks/github                   180 B         102 kB
+#25 47.78 ├ ○ /icon.svg                                0 B            0 B
+#25 47.78 ├ ƒ /project/[id]                        11.2 kB         126 kB
+#25 47.78 ├ ƒ /project/[id]/plan/[planId]           162 kB         287 kB
+#25 47.78 └ ƒ /test                                2.28 kB         113 kB
+#25 47.78 + First Load JS shared by all             102 kB
+#25 47.78   ├ chunks/255-091853b4155593e2.js       45.7 kB
+#25 47.78   ├ chunks/4bd1b696-409494caf8c83275.js  54.2 kB
+#25 47.78   └ other shared chunks (total)          1.99 kB
+#25 47.78 
+#25 47.78 
+#25 47.78 ○  (Static)   prerendered as static content
+#25 47.78 ƒ  (Dynamic)  server-rendered on demand
+#25 47.78 
+#25 DONE 48.1s
+
+#26 [app] exporting to image
+#26 exporting layers
+#26 exporting layers 7.5s done
+#26 exporting manifest sha256:eaff5d6dbd4564ad149113d92f7706623824979bd0f0812361616225395a4dc3 0.0s done
+#26 exporting config sha256:b40bdda6b28d370b110b15fe56940e2b2c643816df10492971b9d06be47f9ff3 0.0s done
+#26 exporting attestation manifest sha256:3d28e2a38d2690cb7bc9bebb6c13e5685b2dab5bcff2703a5b96b1f0c14d7cbd 0.0s done
+#26 exporting manifest list sha256:7d521a3e2b6c0c24dc48270b1048fc10370ce9396736823d63d3a2c9cd24e45a done
+#26 naming to docker.io/library/ai-orchestrator-app:latest done
+#26 unpacking to docker.io/library/ai-orchestrator-app:latest
+#26 unpacking to docker.io/library/ai-orchestrator-app:latest 5.9s done
+#26 DONE 13.6s
+
+#27 [app] resolving provenance for metadata file
+#27 DONE 0.0s
+ ai-orchestrator-migration  Built
+ ai-orchestrator-app  Built
+ Network ai-orchestrator_default  Creating
+ Network ai-orchestrator_default  Created
+ Container ai-orchestrator-db-1  Creating
+ Container ai-orchestrator-db-1  Created
+ Container ai-orchestrator-adminer-1  Creating
+ Container ai-orchestrator-migration-1  Creating
+ Container ai-orchestrator-migration-1  Created
+ Container ai-orchestrator-app-1  Creating
+ Container ai-orchestrator-adminer-1  Created
+ Container ai-orchestrator-app-1  Created
+Attaching to adminer-1, app-1, db-1, migration-1
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+db-1  | 2026-02-14 13:16:04.160 UTC [1] LOG:  starting PostgreSQL 16.11 (Debian 16.11-1.pgdg12+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+db-1  | 2026-02-14 13:16:04.166 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db-1  | 2026-02-14 13:16:04.170 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db-1  | 2026-02-14 13:16:04.180 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1  | 2026-02-14 13:16:04.200 UTC [30] LOG:  database system was shut down at 2026-02-14 13:09:34 UTC
+db-1  | 2026-02-14 13:16:04.245 UTC [1] LOG:  database system is ready to accept connections
+adminer-1  | [Sat Feb 14 13:16:04 2026] PHP 8.4.16 Development Server (http://[::]:8080) started
+migration-1  | Prisma schema loaded from prisma/schema.prisma
+migration-1  | Datasource "db": PostgreSQL database "orchestrator", schema "public" at "db:5432"
+migration-1  | 
+migration-1  | The database is already in sync with the Prisma schema.
+migration-1  | 
+migration-1  | Running generate... (Use --skip-generate to skip the generators)
+migration-1  | [2K[1A[2K[GRunning generate... - Prisma Client
+migration-1  | [2K[1A[2K[G✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 653ms
+migration-1  | 
+migration-1  | Prisma schema loaded from prisma/schema.prisma
+migration-1  | 
+migration-1  | ✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 245ms
+migration-1  | 
+migration-1  | Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+migration-1  | 
+migration-1  | Tip: Want real-time updates to your database without manual polling? Discover how with Pulse: https://pris.ly/tip-0-pulse
+migration-1  | 
+migration-1  | ┌─────────────────────────────────────────────────────────┐
+migration-1  | │  Update available 5.22.0 -> 7.4.0                       │
+migration-1  | │                                                         │
+migration-1  | │  This is a major update - please follow the guide at    │
+migration-1  | │  https://pris.ly/d/major-version-upgrade                │
+migration-1  | │                                                         │
+migration-1  | │  Run the following to update                            │
+migration-1  | │    npm i --save-dev prisma@latest                       │
+migration-1  | │    npm i @prisma/client@latest                          │
+migration-1  | └─────────────────────────────────────────────────────────┘
+[Kmigration-1 exited with code 0
+app-1        | 
+app-1        | up to date, audited 608 packages in 2s
+app-1        | 
+app-1        | 248 packages are looking for funding
+app-1        |   run `npm fund` for details
+app-1        | 
+app-1        | 2 moderate severity vulnerabilities
+app-1        | 
+app-1        | To address all issues (including breaking changes), run:
+app-1        |   npm audit fix --force
+app-1        | 
+app-1        | Run `npm audit` for details.
+app-1        | Environment variables loaded from .env
+app-1        | Prisma schema loaded from prisma/schema.prisma
+app-1        | 
+app-1        | ✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 230ms
+app-1        | 
+app-1        | Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+app-1        | 
+app-1        | Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+app-1        | 
+app-1        | 
+app-1        | > ai-orchestrator@0.1.0 dev
+app-1        | > next dev
+app-1        | 
+app-1        |    ▲ Next.js 15.5.12
+app-1        |    - Local:        http://localhost:3000
+app-1        |    - Network:      http://172.20.0.4:3000
+app-1        |    - Environments: .env
+app-1        | 
+app-1        |  ✓ Starting...
+app-1        |  ✓ Ready in 2.1s
+app-1        |  ○ Compiling /api/sync/command ...
+app-1        |  ✓ Compiled /api/sync/command in 3s (345 modules)
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 399ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 3467ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 50ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 69ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 55ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 41ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 31ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 31ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 31ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 57ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 41ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 33ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 40ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 34ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 41ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 72ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 40ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 30ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 83ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 98ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 52ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 50ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 35ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 72ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 34ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 46ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 52ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 47ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 48ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 37ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 169ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 65ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 57ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 66ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 56ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 21ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 24ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 58ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 58ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 45ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 65ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 31ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 41ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 72ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 28ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 37ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 40ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 24ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 82ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 42ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 65ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 48ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 77ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 33ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 46ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 30ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 58ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 42ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 34ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 44ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 48ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 52ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 27ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 54ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 30ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 97ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 27ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 128ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 49ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 28ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 45ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 74ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 25ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 35ms
+db-1         | 2026-02-14 13:21:04.210 UTC [28] LOG:  checkpoint starting: time
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 1120ms
+db-1         | 2026-02-14 13:21:04.576 UTC [28] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.045 s, sync=0.002 s, total=0.368 s; sync files=3, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/9D113F0, redo lsn=0/9D113B8
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 133ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 57ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 41ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 69ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 25ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 44ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 107ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 75ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 31ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 78ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 23ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 28ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 33ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 52ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 33ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 34ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 48ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 43ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 52ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 55ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 47ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 129ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 68ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 156ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 57ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 30ms
+app-1        | prisma:query SELECT 1
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 68ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 42ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 102ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 51ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 85ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 93ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 35ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 55ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 72ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 66ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 29ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 27ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 28ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 56ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 60ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 26ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 24ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 33ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 50ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 34ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 37ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 30ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 27ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 43ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 89ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 44ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 39ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 108ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 38ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 36ms
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 32ms
+app-1        | prisma:query SELECT 1
+app-1        | prisma:query SELECT "public"."Project"."id", "public"."Project"."userId", "public"."Project"."ideaText", "public"."Project"."context", "public"."Project"."githubRepo", "public"."Project"."requireApproval", "public"."Project"."createdAt", "public"."Project"."updatedAt" FROM "public"."Project" WHERE ("public"."Project"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+app-1        |  GET /api/sync/command?projectId=cmll986ma00012ar30t2afzse 404 in 35ms

@@ -1,0 +1,23 @@
+{
+  "name": "books-api",
+  "version": "1.0.0",
+  "description": "REST API сервер для управления списком 'Книг'",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.0",
+    "typescript": "^5.1.6"
+  }
+}

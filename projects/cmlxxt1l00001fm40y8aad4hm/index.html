@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f2f2f7">
+    <title>ToDo PWA</title>
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/906/906334.png">
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22ToDo%20App%22%2C%22short_name%22%3A%22ToDo%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f2f2f7%22%2C%22theme_color%22%3A%22%23f2f2f7%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F906%2F906334.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D'>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            color: #000;
+            margin: 0;
+            padding: 20px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .todo-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0 15px;
+            min-height: 44px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            appearance: none;
+        }
+
+        input[type="text"]:focus {
+            outline: 2px solid #007aff;
+        }
+
+        button.add-btn {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            min-height: 44px;
+        }
+
+        button.add-btn:active {
+            background-color: #0063ce;
+        }
+
+        /* Важно: без маркеров */
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .todo-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: opacity 0.2s;
+        }
+
+        .todo-item:active {
+            opacity: 0.7;
+        }
+
+        .todo-item span {
+            flex: 1;
+            font-size: 17px;
+            cursor: pointer;
+            word-break: break-word;
+        }
+
+        .todo-item.completed span {
+            text-decoration: line-through;
+            color: #8e8e93;
+        }
+
+        button.delete-btn {
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            min-height: 36px;
+        }
+
+        button.delete-btn:active {
+            background-color: #d63326;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1>Задачи</h1>
+        
+        <form id="todo-form" class="todo-form">
+            <input type="text" id="todo-input" placeholder="Новая задача..." autocomplete="off">
+            <button type="submit" class="add-btn">Добавить</button>
+        </form>
+
+        <ul id="todo-list" class="todo-list">
+            <!-- Список задач будет здесь -->
+        </ul>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'ios_todo_app_data';
+        const form = document.getElementById('todo-form');
+        const input = document.getElementById('todo-input');
+        const list = document.getElementById('todo-list');
+
+        let todos = [];
+
+        function loadTodos() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            todos = stored ? JSON.parse(stored) : [];
+        }
+
+        function saveTodos() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        }
+
+        function createTodoElement(todo) {
+            const li = document.createElement('li');
+            li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+            
+            const textSpan = document.createElement('span');
+            textSpan.textContent = todo.text;
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Удалить';
+            deleteBtn.className = 'delete-btn';
+            
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation(); // Предотвращаем клик по родительскому элементу
+                deleteTodo(todo.id);
+            };
+            
+            // Обработчик клика по всему элементу для переключения статуса
+            li.onclick = () => toggleTodo(todo.id);
+            
+            li.appendChild(textSpan);
+            li.appendChild(deleteBtn);
+            
+            return li;
+        }
+
+        function renderTodos() {
+            list.innerHTML = '';
+            todos.forEach(todo => {
+                list.appendChild(createTodoElement(todo));
+            });
+        }
+
+        function addTodo(text) {
+            const newTodo = {
+                id: Date.now(),
+                text: text,
+                completed: false
+            };
+            todos.push(newTodo);
+            saveTodos();
+            renderTodos();
+        }
+
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            saveTodos();
+            renderTodos();
+        }
+
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                saveTodos();
+                renderTodos();
+            }
+        }
+
+        function init() {
+            loadTodos();
+            renderTodos();
+        }
+
+        // Обработчик отправки формы
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const text = input.value.trim();
+            if (text) {
+                addTodo(text);
+                input.value = '';
+            }
+        };
+
+        // Запуск приложения
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+# 🚀 AI Orchestrator
+
+**Сервис для декомпозиции идей, управления проектами с помощью AI-агентов, RAG-контекста, веб-поиска и обучения на опыте прошлых проектов.**
+
+AI Orchestrator превращает сырую идею в структурированные планы и задачи, генерирует промпты для кодинга, хранит контекст проекта и файлы для RAG, ведёт чат с агентами по ролям, интегрируется с GitHub и Cursor IDE, а также становится умнее с каждым удалённым проектом благодаря **Global Project Memory**.
+
+---
+
+## 🛠 Технический стек
+
+| Слой | Технологии |
+|------|------------|
+| **Frontend** | Next.js (App Router), React 19, Tailwind CSS, shadcn/ui |
+| **Backend** | Next.js API Routes, Vercel AI SDK (OpenAI, Anthropic, OpenRouter, Z.ai) |
+| **Database** | PostgreSQL с pgvector, Prisma ORM; RAG на векторном поиске |
+| **Infrastructure** | Docker Compose |
+| **External** | Tavily API (веб-поиск для агентов) |
+
+---
+
+## ✨ Ключевые возможности (Features)
+
+### 1. 🤖 AI Декомпозиция
+
+- **Одна строка → три плана:** ввод идеи в свободной форме, LLM генерирует 3 варианта архитектурного плана с разным tech stack и оценкой релевантности.
+- **План → задачи:** автоматическая нарезка выбранного плана на задачи (Tasks) с учётом дубликатов и зависимостей.
+- **🧠 Учит опыт прошлых проектов:** при создании нового плана AI анализирует инсайты из удалённых проектов и учитывает их при выборе технологий.
+- **Умная оценка сложности:** автоматическое определение масштаба проекта (S/M/L/XL) и генерация адекватного количества задач.
+
+### 2. 📋 Smart Task Management
+
+- **Канбан-подобный список:** задачи со статусами TODO → IN_PROGRESS → REVIEW → WAITING_APPROVAL → DONE.
+- **Human-in-the-Loop:** включите опцию в настройках проекта — задачи после успешного QA будут ждать вашего ручного подтверждения перед переходом в DONE. Кнопки Approve (зелёная) и Reject (красная) в списке задач.
+- **Агенты:** у каждой задачи можно указать исполнителя — **Frontend**, **Backend**, **DevOps**, **Teamlead**, **Cursor**, **QA** (и наблюдателя).
+- **Граф зависимостей:** блокировка задач друг другом, настройка связей и визуализация.
+- **Генерация промптов:** создание детальных инструкций для кодинга под каждую задачу с учётом контекста проекта и загруженных файлов.
+
+### 3. 🔍 QA Code Review & Web Search
+
+- **🔍 Web Search Tool:** все агенты (Chat, Prompt Generator, QA) имеют доступ к интернету через Tavily API. При необходимости ищут свежую документацию и решения ошибок — не гадают.
+- **🔍 QA Code Review:** QA агент — настоящий Senior Code Reviewer. Он не просто верит логам, а:
+  - Читает файлы проекта через инструмент `readFile`
+  - Проверяет код на хардкод, отсутствие типов (`any`), ошибки логики
+  - REJECT задачи при плохом качестве кода
+  - Использует веб-поиск для проверки документации
+  - Требует конкретные доказательства выполнения (логи тестов, результаты сборки, список созданных файлов)
+
+### 4. 🏗️ Dynamic Replanning — Динамическая переработка плана
+
+- **Architect Agent:** автоматически анализирует завершённые задачи и обновляет оставшиеся при изменении контекста.
+- **Актуализация плана:** если решение в одной задаче влияет на другие, Архитектор перепишет их описания и добавит комментарии с обоснованием.
+- **Синхронизация с документацией:** при изменении плана автоматически генерируется ADR (Architecture Decision Record).
+
+### 5. 📚 RAG & Context
+
+- **Global Context:** текстовое описание правил и контекста проекта; агенты учитывают его при генерации ответов и промптов.
+- **Files RAG (векторный поиск):** загрузка TXT, MD, JSON, TS/JS и др. в проект → извлечение текста → разбиение на чанки (~1000 символов с перекрытием) → эмбеддинги OpenAI (text-embedding-3-small) → сохранение в таблицу `FileEmbedding`. При генерации промптов и в чате с агентами в контекст попадают только **релевантные куски** по косинусной близости к запросу (экономия токенов, работа с большими документами).
+- **Auto-Sync RAG:** автоматическая синхронизация файлов проекта. Клиент следит за изменениями и мгновенно обновляет эмбеддинги.
+- **Global Project Memory:** при удалении проекта AI анализирует все задачи и комментарии, извлекает 3-5 ключевых технических уроков и сохраняет их с эмбеддингами в `GlobalInsight`. Эти инсайты автоматически учитываются при создании новых проектов.
+
+### 6. 📖 Documentation Agent
+
+- **ADR Generation:** автоматическая генерация Architecture Decision Records:
+  - При создании задач → `001-initial-architecture.md` с описанием выбранного плана и стека
+  - При изменении плана → `002-architecture-change-{timestamp}.md` с обоснованием изменений
+- **Сохранение на клиент:** все ADR сохраняются в папку `docs/adr/` через sync-client.
+- **Интеграция с sync-client:** файлы создаются с подтверждением пользователя.
+
+### 7. 💰 FinOps — Учёт расходов на AI
+
+- **Автоматический трекинг:** все вызовы AI моделей (OpenAI, Anthropic, Z.ai, embeddings) автоматически фиксируются в БД.
+- **Стоимость по проектам:** на странице проекта видите общую стоимость, количество токенов и разбивку по типам действий.
+- **Детализация:**
+  - По типу действия: decompose, generate_tasks, prompt_gen, chat, qa_check, replan, embedding, generate-adr.
+  - По модели: gpt-4o, gpt-4o-mini, claude-3-5-sonnet и т.д.
+  - История последних вызовов с датой, моделью и стоимостью.
+- **Billing Dashboard:** таблицы с общей стоимостью, токенами по типам/моделям и списком последних использований.
+- **Цены:** хардкоды для моделей (например, GPT-4o: $2.5/1M input, $10/1M output).
+
+### 8. 💬 Live Chat with Agents
+
+- Чат внутри задачи.
+- Авто-ответы от ролей (при упоминании `@role` или по смыслу вопроса).
+- Учёт контекста проекта, загруженных файлов и веб-поиска в ответах.
+
+### 9. 🔌 Integrations
+
+- **GitHub:** вебхуки для авто-смены статусов: Push в ветку задачи → IN_PROGRESS, открытие PR → REVIEW, merge → DONE.
+- **IDE (MCP):** API для интеграции с Cursor — получение списка задач, деталей и обновление статусов; описание в `.cursorrules` в клиентском проекте.
+
+### 10. 📦 Quick Start Kit
+
+- **One-click setup:** скачайте готовый набор файлов для интеграции с вашим проектом кнопкой "Download Kit" на странице плана.
+- **В архиве:**
+  - `sync-client.js` — клиент для автоматической синхронизации файлов с RAG.
+  - `.cursorrules` — правила для Cursor с командами для общения с Orchestrator.
+  - `.orchestrator` — конфиг с Project ID.
+  - `start.sh` — скрипт для запуска синхронизации.
+- **Быстрый старт:** распакуйте архив в папку проекта и запустите `./start.sh` — файлы начнут автоматически синхронизироваться!
+
+---
+
+## 🎯 Как использовать сервис
+
+### Структура URL
+
+```
+http://localhost:3002/project/{projectId}/plan/{planId}
+```
+
+- `{projectId}` — уникальный идентификатор проекта (например: `cmll5cibp000110r1di9qt8gp`)
+- `{planId}` — уникальный идентификатор плана (например: `cmll5cic8000310r159qnsxbu`)
+
+**Пример:**
+```
+http://localhost:3002/project/cmll5cibp000110r1di9qt8gp/plan/cmll5cic8000310r159qnsxbu
+```
+
+Где:
+- `cmll5cibp000110r1di9qt8gp` = Project ID
+- `cmll5cic8000310r159qnsxbu` = Plan ID
+
+### Основные страницы
+
+| Страница | URL | Описание |
+|---------|-----|----------|
+| Главная | `http://localhost:3002/` | Ввод идеи и выбор провайдера/модели |
+| Проект | `http://localhost:3002/project/{projectId}` | Список планов проекта, Billing Dashboard |
+| План | `http://localhost:3002/project/{projectId}/plan/{planId}` | Задачи плана, команды, Download Kit |
+
+### Команды в терминале
+
+#### Запуск сервиса
+
+```bash
+# Клонирование
+git clone <your-repo-url>
+cd ai-orchestrator
+
+# Настройка переменных окружения
+cp .env.example .env
+# Отредактируйте .env с вашими API ключами
+
+# Запуск через Docker
+docker compose up -d --build
+```
+
+#### Сервисы после запуска
+
+- **Приложение:** http://localhost:3002
+- **Adminer (DB UI):** http://localhost:8081
+- **PostgreSQL (pgvector):** localhost:5433
+
+#### Миграции БД
+
+При первом запуске миграции применяются автоматически. Если вы изменили схему:
+
+```bash
+# Внутри контейнера (не забудьте использовать docker compose exec)
+docker compose exec app npx prisma db push
+
+# Для создания миграций с историей
+docker compose exec app npx prisma migrate dev --name <migration-name>
+```
+
+#### Синхронизация файлов (из клиентского проекта)
+
+```bash
+# 1. Скачайте и распакуйте Download Kit с страницы плана
+
+# 2. Установите зависимости
+npm install chokidar
+
+# 3. Запустите синхронизацию
+./start.sh
+# или вручную:
+# node sync-client.js
+```
+
+#### Команды для Cursor IDE
+
+Добавьте эти команды в `.cursorrules` вашего проекта:
+
+```bash
+# Получить список задач
+curl -X GET http://localhost:3002/api/mcp/tasks?projectId={projectId}
+
+# Получить детали задачи
+curl -X POST http://localhost:3002/api/ai-agent/v1/actions \
+  -H "Content-Type: application/json" \
+  -d '{"action": "get_task_details", "taskId": "{taskId}"}'
+
+# Обновить статус задачи
+curl -X POST http://localhost:3002/api/ai-agent/v1/actions \
+  -H "Content-Type: application/json" \
+  -d '{"action": "update_task", "taskId": "{taskId}", "status": "DONE"}'
+
+# Поиск по RAG
+curl -X POST http://localhost:3002/api/rag \
+  -H "Content-Type: application/json" \
+  -d '{"projectId": "{projectId}", "query": "ваш запрос"}'
+```
+
+---
+
+## ⚙️ Установка и запуск
+
+### 1. Клонирование
+
+```bash
+git clone <your-repo-url>
+cd ai-orchestrator
+```
+
+### 2. Настройка `.env`
+
+Скопируйте пример и заполните переменные:
+
+```bash
+cp .env.example .env
+```
+
+**Переменные окружения:**
+
+| Переменная | Описание | Обязательно |
+|------------|----------|-------------|
+| `DATABASE_URL` | URL PostgreSQL. Для Docker используйте `postgresql://orchestrator:orchestrator@db:5432/orchestrator?schema=public` | ✅ |
+| `OPENAI_API_KEY` | Ключ OpenAI | для OpenAI |
+| `OPENAI_BASE_URL` | Пусто для официального API; для прокси/кастомного эндпоинта — свой URL | опционально |
+| `ANTHROPIC_API_KEY` | Ключ Anthropic | для Claude |
+| `OPENROUTER_API_KEY` | Ключ OpenRouter | для OpenRouter |
+| `OPENROUTER_BASE_URL` | Обычно `https://openrouter.ai/api/v1` | опционально |
+| `ZAI_API_KEY` | Ключ Z.ai (GLM) | для Z.ai |
+| `ZAI_BASE_URL` | Эндпоинт Z.ai (coding или paas/v4) | опционально |
+| `AI_PROVIDER` | По умолчанию: `openai`, `anthropic`, `openrouter`, `zai` | опционально |
+| `AI_MODEL` | Модель по умолчанию, например `gpt-4o-mini` | опционально |
+| `GITHUB_WEBHOOK_SECRET` | Секрет вебхука GitHub (Settings → Webhooks) для авто-статусов | опционально |
+| `TAVILY_API_KEY` | Ключ Tavily для веб-поиска агентов (получить на tavily.com) | для Web Search |
+
+### 3. Запуск через Docker
+
+Используется образ **pgvector/pgvector:pg16** (PostgreSQL с расширением vector). При **первом переходе** на pgvector нужна чистая БД:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+Если БД уже развёрнута на pgvector, достаточно:
+
+```bash
+docker compose up -d --build
+```
+
+**Сервисы после запуска:**
+
+- **Приложение:** http://localhost:3002
+- **Adminer (DB UI):** http://localhost:8081
+- **PostgreSQL (pgvector):** localhost:5433
+
+### 4. Миграции БД
+
+При первом запуске миграции применяются автоматически (сервис `migration` в `docker-compose` выполняет `prisma db push` и `prisma generate`).
+
+Если вы изменили `prisma/schema.prisma` после запуска, примените схему вручную **внутри контейнера** (локальный `npx` не видит БД в Docker):
+
+```bash
+docker compose exec app npx prisma db push
+```
+
+Для создания миграций (история изменений) при работающей БД:
+
+```bash
+docker compose exec app npx prisma migrate dev --name <migration-name>
+```
+
+---
+
+## 🔌 API Documentation (Brief)
+
+| Метод | Путь | Назначение |
+|-------|------|------------|
+| `POST` | `/api/decompose-idea` | Декомпозиция идеи: тело `{ ideaText, provider?, model? }` → проект + 3 плана |
+| `POST` | `/api/generate-tasks` | Генерация задач по плану: `{ planId }` → список задач + ADR |
+| `POST` | `/api/generate-coding-prompt` | Генерация промпта для кодинга по задаче: `{ taskId }`; контекст файлов — по векторному поиску релевантных чанков |
+| `POST` | `/api/upload` | Загрузка файлов в проект (multipart/form-data, `projectId`); для текстовых файлов создаются эмбеддинги и чанки для RAG |
+| `GET` / `POST` | `/api/tasks`, `/api/tasks/[taskId]` | CRUD задач; PATCH для статуса, агента, зависимостей |
+| `POST` | `/api/tasks/[taskId]/approve` | **Human-in-the-Loop:** `{ approved: boolean }` — подтвердить или отклонить задачу (Approve → DONE, Reject → REVIEW) |
+| `GET` / `POST` | `/api/plans`, `/api/projects`, `/api/projects/[id]` | Планы и проекты; PATCH проекта — контекст, GitHub repo, `requireApproval` (Human-in-the-Loop) |
+| `GET` | `/api/projects/[id]/billing` | **FinOps:** статистика по расходам на AI (общая стоимость, токены по типам/моделям, последние использования) |
+| `DELETE` | `/api/projects/[id]` | Удаление проекта: анализирует задачи/комментарии → сохраняет инсайты в Global Memory → удаляет проект |
+| `POST` | `/api/webhooks/github` | Вебхук GitHub для авто-обновления статусов задач |
+| `GET` | `/api/mcp/tasks` | **Для Cursor:** список задач по проекту (`?projectId=...`) или заголовок `X-Project-Id`) |
+| `GET` | `/api/mcp/sse` | SSE-стрим с описанием инструментов (MCP-like) |
+| `POST` | `/api/ai-agent/v1/actions` | Единая точка для AI: `get_tasks`, `get_task_details`, `update_task` |
+| `POST` | `/api/sync` | Авто-синхронизация файлов с RAG: `{ projectId, filePath, content }` |
+| `POST` | `/api/rag` | RAG запрос: `{ projectId, query }` → релевантные файлы и их части |
+| `GET` | `/api/download-kit` | Скачивание стартового пакета для проекта (`?projectId=...`) → ZIP-архив |
+
+**Агентские инструменты (Tools):**
+
+- `searchKnowledge` — поиск по файлам проекта (RAG)
+- `webSearch` — поиск в интернете через Tavily API
+- `readFile` — чтение содержимого файла из проекта
+
+Подробнее по форматам запросов/ответов — см. исходный код в `app/api/`.
+
+---
+
+## 🤖 Интеграция с Cursor IDE
+
+В репозитории, где вы пишете код (клиентский проект), можно положить файл **`.cursorrules`** и описать, как Cursor должен общаться с Orchestrator.
+
+**Что уже есть в этом репо:** в корне монорепо лежит пример `.cursorrules` (или его можно скопировать в ваш рабочий проект). В нём указано:
+
+1. **Базовый URL оркестратора** — задаётся переменной `ORCHESTRATOR_URL`.
+   - Локально: `http://localhost:3002` (порт 3002, т.к. приложение в Docker проброшено как 3002:3000).
+2. **Project ID** — откуда брать текущий проект (например `ORCHESTRATOR_PROJECT_ID` в `.env` или в конфиге).
+3. **Какие запросы делать:**
+   - Список задач: `GET {ORCHESTRATOR_URL}/api/mcp/tasks?projectId=...` или
+     `POST {ORCHESTRATOR_URL}/api/ai-agent/v1/actions` с телом `{ "action": "get_tasks", "projectId": "..." }`.
+   - Детали задачи: `POST .../api/ai-agent/v1/actions` с `{ "action": "get_task_details", "taskId": "..." }`.
+   - Отметить задачу выполненной: `{ "action": "update_task", "taskId": "...", "status": "DONE" }`.
+
+**Минимум для запуска за 5 минут:** поднять Orchestrator (`docker compose up -d --build`), в клиентском проекте в `.env` задать `ORCHESTRATOR_URL=http://localhost:3002` и `ORCHESTRATOR_PROJECT_ID=<id вашего проекта>`, и добавить в проект `.cursorrules` с этими инструкциями (можно взять за основу пример из корня репозитория).
+
+### 🎮 Download Kit (Быстрый старт для проекта)
+
+Для автоматической синхронизации файлов проекта с RAG-системой используйте Download Kit:
+
+1. Откройте страницу плана вашего проекта в Orchestrator.
+2. Нажмите кнопку **"Download Kit"** справа от заголовка.
+3. Распакуйте архив `project-kit.zip` в папку вашего проекта.
+4. Запустите `chmod +x start.sh && ./start.sh` (Linux/Mac) или запустите `npm install chokidar && node sync-client.js` вручную.
+
+**Что содержится в архиве:**
+
+- `sync-client.js` — клиент для отслеживания изменений файлов и отправки их в RAG.
+- `.cursorrules` — правила для Cursor с готовыми командами.
+- `.orchestrator` — конфиг с Project ID (автоматически подставляется при скачивании).
+- `start.sh` — скрипт для установки зависимостей и запуска синхронизации.
+
+**Как работает синхронизация:**
+
+- Клиент следит за изменениями файлов (кроме `node_modules`, `.git`, `.next`, и т.д.).
+- При каждом изменении файл отправляется на `/api/sync`.
+- Контент разбивается на чанки, создаются эмбеддинги и сохраняются в PostgreSQL (pgvector).
+- При генерации промптов и в чате агенты используют релевантные части файлов по косинусной близости.
+
+---
+
+## 📁 Структура проекта (основное)
+
+```
+ai-orchestrator/
+├── app/
+│   ├── api/              # API Routes (decompose, tasks, mcp, ai-agent, webhooks, upload, …)
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/           # UI: планы, задачи, контекст, чат, загрузка файлов, billing dashboard
+├── lib/
+│   ├── agents/           # AI-агенты: Prompt Generator, QA (Code Review), Architect, Doc Writer
+│   │   └── tools.ts      # Инструменты агентов: searchKnowledge, webSearch, readFile
+│   ├── rag/              # RAG: chunk, embeddings, search (GlobalInsights), store (pgvector)
+│   └── ai/               # AI providers (OpenAI, Anthropic, OpenRouter, Z.ai), pricing, call (FinOps tracking)
+├── prisma/
+│   └── schema.prisma     # Модели: Project, Plan, Task, Comment, ProjectFile, FileEmbedding, GlobalInsight, TokenUsage
+├── public/
+│   └── sync-client.js    # Клиент для авто-синхронизации файлов
+├── docker-compose.yml
+├── .env.example
+└── README.md
+```
+
+**Модели Prisma:**
+
+- `Project` — проект с идеей, контекстом, GitHub repo, `requireApproval` (Human-in-the-Loop)
+- `Plan` — архитектурный план с tech stack, оценкой сложности и рассуждениями
+- `Task` — задача с исполнителем, зависимостями, комментариями, `generatedPrompt`
+- `Comment` — комментарии к задачам
+- `ProjectFile` — загруженные файлы проекта
+- `FileEmbedding` — векторные эмбеддинги чанков файлов (RAG)
+- `GlobalInsight` — выученные уроки из удалённых проектов (опыт)
+- `TokenUsage` — запись о вызове AI модели (модель, токены, стоимость, тип действия, projectId, taskId)
+- `SyncCommand` — команды для выполнения на клиенте (SHELL или WRITE_FILE для ADR)
+
+---
+
+## 🏢 Дальнейшие шаги до уровня enterprise
+
+Чтобы вывести решение на уровень enterprise, имеет смысл предусмотреть:
+
+- **Аутентификация и авторизация:** SSO (OAuth2/OIDC), роли, разграничение доступа к проектам и задачам.
+- **Мультитенантность:** жёсткое разделение данных по организациям/командам, лимиты и квоты.
+- **Надёжность и наблюдаемость:** логирование, метрики (Prometheus/OpenTelemetry), трейсинг запросов, алерты; health-check эндпоинты и готовность к k8s.
+- **Безопасность API:** защита эндпоинтов (API key, JWT), rate limiting, валидация вебхуков по подписи.
+- **Аудит и соответствие:** журнал изменений по задачам и проектам, хранение истории промптов и решений для соответствия политикам.
+- **Масштабирование и очереди:** вынос тяжёлых операций (генерация планов, задач, промптов, анализ проектов) в очереди (Bull, SQS и т.п.), горизонтальное масштабирование воркеров.
+- **Резервное копирование и DR:** автоматические бэкапы БД, план восстановления и тестовые восстановления.
+- **Улучшение Global Memory:** категоризация инсайтов, приоритизация, устаревание знаний, фильтрация по технологиям.
+
+Документация обновлена под текущий MVP; по мере добавления перечисленных элементов её стоит дополнять соответствующими разделами.

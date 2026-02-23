@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Todo Kanban PWA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Мои Задачи</h1>
+        </header>
+
+        <div class="board">
+            <!-- Column: Todo -->
+            <div class="column" id="column-todo">
+                <div class="column-header">
+                    <h2>Надо сделать</h2>
+                </div>
+                <div class="column-body">
+                    <!-- Tasks will be injected here by JS -->
+                </div>
+                <div class="column-footer">
+                    <input type="text" class="new-task-input" placeholder="+ Новая задача">
+                </div>
+            </div>
+
+            <!-- Column: In Progress -->
+            <div class="column" id="column-in-progress">
+                <div class="column-header">
+                    <h2>В работе</h2>
+                </div>
+                <div class="column-body">
+                    <!-- Tasks will be injected here by JS -->
+                </div>
+                <div class="column-footer">
+                    <input type="text" class="new-task-input" placeholder="+ Новая задача">
+                </div>
+            </div>
+
+            <!-- Column: Done -->
+            <div class="column" id="column-done">
+                <div class="column-header">
+                    <h2>Готово</h2>
+                </div>
+                <div class="column-body">
+                    <!-- Tasks will be injected here by JS -->
+                </div>
+                <div class="column-footer">
+                    <input type="text" class="new-task-input" placeholder="+ Новая задача">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Load Storage Service first -->
+    <script src="js/storage.js"></script>
+    <!-- Load Main App Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>

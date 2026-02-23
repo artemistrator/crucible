@@ -1,0 +1,359 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl-arm64-openssl-1.1.x", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+}
+
+enum ProjectStatus {
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+model Project {
+  id              String        @id @default(cuid())
+  userId          String?
+  ideaText        String
+  context         String       @db.Text @default("")
+  githubRepo      String?
+  requireApproval Boolean       @default(false)
+  aiProvider      String?
+  aiModel         String?
+  lastSeen        DateTime?    @default(now())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  status          ProjectStatus @default(IN_PROGRESS)
+  plans           Plan[]
+  files           ProjectFile[]
+  tokenUsages     TokenUsage[]
+  syncCommands    SyncCommand[]
+  executionSessions ExecutionSession[]
+  tickets         Ticket[]
+  globalInsights  GlobalInsight[]
+}
+
+model Plan {
+  id                  String   @id @default(cuid())
+  projectId           String
+  project             Project  @relation(fields: [projectId], references: [id])
+  title               String
+  description         String?
+  techStack           String
+  relevanceScore      Int?
+  selected            Boolean  @default(false)
+  estimatedComplexity String?  @db.VarChar(2)
+  estimatedTime       String?  @db.VarChar(80)
+  reasoning           String?  @db.Text
+  prosCons            Json?
+  createdAt           DateTime @default(now())
+  tasks               Task[]
+}
+
+enum AgentRole {
+  TASK_EXECUTOR
+  BACKEND
+  DEVOPS
+  TEAMLEAD
+  CURSOR
+  QA
+  CSS
+}
+
+enum MessageStatus {
+  PENDING
+  PROCESSING
+  PROCESSED
+  FAILED
+}
+
+enum MessageType {
+  TASK_REQUEST
+  TASK_RESPONSE
+  TICKET_REQUEST
+  TICKET_RESPONSE
+  STYLE_REQUEST
+  STYLE_RESPONSE
+  QA_REQUEST
+  QA_RESPONSE
+  ARCHITECT_REQUEST
+  ARCHITECT_RESPONSE
+  USER_MESSAGE
+  AGENT_MESSAGE
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  WAITING_APPROVAL
+  DONE
+  REJECTED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+  REJECTED
+}
+
+model Task {
+  id                  String            @id @default(cuid())
+  planId              String
+  plan                Plan              @relation(fields: [planId], references: [id])
+  title               String
+  description         String
+  status              TaskStatus        @default(TODO)
+  executorAgent       AgentRole?
+  observerAgent       AgentRole         @default(TEAMLEAD)
+  generatedPrompt     String?           @db.Text
+  branchName          String?
+  verificationCriteria Json?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  comments            Comment[]
+  dependencies        TaskDependency[]  @relation("TaskDependencies")
+  dependents          TaskDependency[]  @relation("DependentTasks")
+  tokenUsages         TokenUsage[]
+  attachments         TaskAttachment[]
+}
+
+model Ticket {
+  id             String       @id @default(cuid())
+  projectId      String
+  project        Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title          String
+  description    String       @db.Text
+  status         TicketStatus @default(OPEN)
+  relatedTaskId  String?
+  retryCount     Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model TaskDependency {
+  id          String @id @default(cuid())
+  taskId      String
+  task        Task   @relation("TaskDependencies", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOnId String
+  dependsOn   Task   @relation("DependentTasks", fields: [dependsOnId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([taskId, dependsOnId])
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id         String    @id @default(cuid())
+  taskId     String
+  task       Task      @relation(fields: [taskId], references: [id])
+  content    String
+  authorRole AgentRole
+  isSystem   Boolean   @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model ProjectFile {
+  id          String          @id @default(cuid())
+  projectId   String
+  project     Project         @relation(fields: [projectId], references: [id])
+  name        String
+  url         String
+  mimeType    String
+  content     String?         @db.Text
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @default(now()) @updatedAt
+  embeddings  FileEmbedding[]
+  entities    CodeEntity[]
+}
+
+model FileEmbedding {
+  id       String     @id @default(cuid())
+  fileId   String
+  file     ProjectFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  content  String     @db.Text
+  embedding String?   @db.Text
+}
+
+model GlobalInsight {
+  id            String   @id @default(cuid())
+  content       String   @db.Text
+  tags          String[]
+  embedding     String?  @db.Text
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  planId        String?
+  sessionId     String?
+  category      String?
+  severity      String?
+  fingerprint   String?  @unique
+  title         String?
+  recommendation String? @db.Text
+  createdAt     DateTime @default(now())
+}
+
+model TokenUsage {
+  id               String   @id @default(cuid())
+  projectId        String
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  taskId           String?
+  task             Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  model            String
+  promptTokens     Int
+  completionTokens Int
+  cost             Float
+  actionType       String
+  createdAt        DateTime @default(now())
+}
+
+model TaskAttachment {
+  id              String   @id @default(cuid())
+  taskId          String
+  task            Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  filePath         String
+  fileName         String
+  mimeType        String
+  visionAnalysis  String?  @db.Text
+  createdAt       DateTime @default(now())
+}
+
+enum CommandStatus {
+  PENDING
+  APPROVED
+  EXECUTING
+  COMPLETED
+  FAILED
+  REJECTED
+  SKIPPED
+}
+
+model SyncCommand {
+  id              String        @id @default(cuid())
+  projectId       String
+  project         Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  command         String
+  reason          String?
+  type            String        @default("SHELL")
+  filePath        String?
+  fileContent     String?       @db.Text
+  status          CommandStatus @default(PENDING)
+  requiresApproval Boolean       @default(true)
+  stdout          String?       @db.Text
+  stderr          String?       @db.Text
+  exitCode        Int?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum EntityType {
+  CLASS
+  FUNCTION
+  VARIABLE
+  IMPORT
+  EXPORT
+  INTERFACE
+  TYPE
+}
+
+enum DependencyType {
+  IMPORTS
+  CALLS
+  EXTENDS
+  IMPLEMENTS
+  TYPE_OF
+}
+
+model CodeEntity {
+  id         String     @id @default(cuid())
+  fileId     String
+  file       ProjectFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  name       String
+  type       EntityType
+  startLine  Int
+  endLine    Int
+  signature  String?    @db.Text
+  metadata   String?    @default("{}")
+  createdAt  DateTime   @default(now())
+  dependenciesAsSource  CodeDependency[] @relation("SourceEntity")
+  dependenciesAsTarget  CodeDependency[] @relation("TargetEntity")
+}
+
+model CodeDependency {
+  id          String     @id @default(cuid())
+  sourceId    String
+  source      CodeEntity @relation("SourceEntity", fields: [sourceId], references: [id], onDelete: Cascade)
+  targetId    String
+  target      CodeEntity @relation("TargetEntity", fields: [targetId], references: [id], onDelete: Cascade)
+  type        DependencyType
+  createdAt   DateTime   @default(now())
+}
+
+model ExecutionSession {
+  id          String        @id @default(cuid())
+  projectId    String
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  planId      String?
+  status      String        @default("RUNNING") // RUNNING, PAUSED, STOPPED, ERROR
+  costLimit   Float?
+  currentCost Float         @default(0)
+  metadata    Json?         @default("{}")
+  engine      String?        @default("legacy") // "legacy" or "ahp"
+  startTime   DateTime?
+  endTime     DateTime?
+  totalSteps  Int?           @default(0)
+  totalErrors Int?           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  logs        ExecutionLog[]
+  messages    AgentMessage[]
+}
+
+model AgentMessage {
+  id          String        @id @default(cuid())
+  sessionId   String
+  session     ExecutionSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  sourceAgent AgentRole
+  targetAgent AgentRole
+
+  eventType   MessageType
+  payload     Json         @default("{}")
+
+  status      MessageStatus @default(PENDING)
+
+  correlationId String?     @unique // Для группировки связанных сообщений
+  replyToId   String?
+  replyTo     AgentMessage? @relation("MessageReplies", fields: [replyToId], references: [id])
+  replies     AgentMessage[] @relation("MessageReplies")
+
+  error       String?      @db.Text
+  metadata    Json?        @default("{}")
+
+  createdAt   DateTime     @default(now())
+  processedAt DateTime?
+  updatedAt   DateTime     @updatedAt
+
+  @@index([sessionId, status, targetAgent])
+  @@index([correlationId])
+  @@index([replyToId])
+}
+
+model ExecutionLog {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   ExecutionSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type      String
+  message   String   @db.Text
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

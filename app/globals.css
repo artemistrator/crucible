@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.75rem;
+  }
+
+  /* Project page: light defaults */
+  .project-page {
+    --pp-bg: #f1f5f9;
+    --pp-surface: #ffffff;
+    --pp-surface2: #e2e8f0;
+    --pp-border: #cbd5e1;
+    --pp-text: #0f172a;
+    --pp-muted: #64748b;
+    --pp-accent: #22c55e;
+    --pp-accent2: #3b82f6;
+    --pp-danger: #ef4444;
+  }
+
+  /* Project page: dark overrides */
+  .dark .project-page {
+    --pp-bg: #0d0f14;
+    --pp-surface: #151820;
+    --pp-surface2: #1c2030;
+    --pp-border: #252a3a;
+    --pp-text: #e8eaf0;
+    --pp-muted: #6b7394;
+    --pp-accent: #4ade80;
+    --pp-accent2: #60a5fa;
+    --pp-danger: #f87171;
+  }
+
+  @keyframes dropdownIn {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes taskFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-task-fade-up {
+    animation: taskFadeUp 350ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Agent Stream panel scrollbar — light/dark theme */
+.agent-stream-log-area::-webkit-scrollbar {
+  width: 4px;
+}
+.agent-stream-log-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+.agent-stream-log-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+.dark .agent-stream-log-area::-webkit-scrollbar-thumb {
+  background: #1e2535;
+}
+.agent-stream-log-area {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.dark .agent-stream-log-area {
+  scrollbar-color: #1e2535 transparent;
+}

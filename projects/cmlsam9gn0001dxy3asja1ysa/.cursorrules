@@ -1,0 +1,68 @@
+{
+  "rules": [
+    {
+      "when": {
+        "command": "orchestrator help"
+      },
+      "then": {
+        "response": "Доступные команды:\n- `@orchestrator task` - Взять следующую доступную задачу.\n- `@orchestrator report <ID> <CONTENT>` - Отправить подробный отчет о выполнении.\n- `@orchestrator prompt <ID>` - Сгенерировать промпт.\n- `@orchestrator done <ID>` - Поставить задачу на проверку QA агенту.\n- `@orchestrator autopilot` - Запустить автоматическое выполнение задач (батчами по 5)."
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator task"
+      },
+      "then": {
+        "response": "Я ищу следующую задачу... Выполняю: `curl -s \"http://127.0.0.1:3002/api/ide?action=get_next_task&projectId=<PROJECT_ID>\"`. (Замени <PROJECT_ID> на ID из файла .orchestrator или спроси пользователя)."
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator prompt <TASK_ID>"
+      },
+      "then": {
+        "response": "Генерирую промпт... Выполняю: `curl -s -X POST -H \"Content-Type: application/json\" -d '{\"action\":\"generate_prompt\",\"taskId\":\"<TASK_ID>\"}' \"http://127.0.0.1:3002/api/ide\"`"
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator report <TASK_ID> <CONTENT>"
+      },
+      "then": {
+        "response": "Отправляю отчет... Выполняю: `curl -s -X POST -H \"Content-Type: application/json\" -d '{\"action\":\"add_comment\",\"taskId\":\"<TASK_ID>\",\"content\":\"<CONTENT>\",\"role\":\"CURSOR\"}' \"http://127.0.0.1:3002/api/ide\"`\n\n📋 ОБЯЗАТЕЛЬНЫЙ ФОРМАТ ОТЧЕТА:\n```\n📌 CURRENT TASK: [ID] [Title]\n\n✅ ВЫПОЛНЕНО:\n- [детали что сделано]\n\n📄 ФАЙЛЫ:\n- [список созданных/измененных файлов]\n\n🧪 ТЕСТЫ (если требовались):\n[логи тестов]\n\n🔧 СБОРКА (если требовалась):\n[результаты сборки]\n\n📝 ДОКАЗАТЕЛЬСТВА:\n[вывод команд, скриншоты]\n```\n\n⚠️ QA агент ПРОВЕРЯЕТ твой отчет. Убедись, что он содержит КОНКРЕТНЫЕ доказательства."
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator done <TASK_ID>"
+      },
+      "then": {
+        "response": "Отправляю задачу на проверку QA агенту... Выполняю: `curl -s -X POST -H \"Content-Type: application/json\" -d '{\"action\":\"update_task\",\"taskId\":\"<TASK_ID>\",\"status\":\"DONE\"}' \"http://127.0.0.1:3002/api/ide\"`\n\n⚠️ ВАЖНО: QA агент проверит твой последний отчет (комментарий).\n\n❌ ОТПРАВЛЯТЬ НЕЛЬЗЯ:\n- \"сделал\", \"готово\", \"выполнено\"\n- Общие фразы без доказательств\n\n✅ ДОЛЖНО БЫТЬ:\n- Имена созданных/измененных файлов\n- Строки кода или фрагменты реализации\n- Логи тестов (если требовались)\n- Результаты сборки (если требовалась)\n- Вывод команд или скриншоты"
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator autopilot"
+      },
+      "then": {
+        "response": "🚀 ЗАПУСК АВТОПИЛОТА (БАТЧ-РЕЖИМ).\n\n⚠️ ВАЖНО: Режим батчей по 5 задач для предотвращения переполнения контекста.\nПосле каждых 5 задач Я ОСТАНОВЛЮСЬ и попрошу начать новый чат.\n\n**АЛГОРИТМ ДЕЙСТВИЙ (Выполняй строго):**\n\n1. Установи счётчик `tasksInBatch = 0`.\n2. ПОЛУЧИ ЗАДАЧУ: `@orchestrator task`.\n3. Если задача null (нет доступных задач) -> СТОП. Напиши \"✅ Все задачи выполнены!\".\n4. Если задача есть:\n   a. Сначала обнови статус на IN_PROGRESS: `@orchestrator task_status <ID> IN_PROGRESS`\n   b. Проверь `generatedPrompt`. Если пусто -> `@orchestrator prompt <ID>`.\n   c. **ВЫПОЛНЕНИЕ:** Прочитай промпт и выполни (пиши код, создавай файлы).\n   d. **ОТЧЕТ:** Используй ОБЯЗАТЕЛЬНЫЙ ФОРМАТ:\n      - `📌 CURRENT TASK: [ID] [Title]`\n      - Что сделано, файлы, логи, доказательства\n      Отправь: `@orchestrator report <ID> \"...текст отчета...\"`.\n   e. **ПРОВЕРКА:** `@orchestrator done <ID>`.\n      - Если QA отклонил -> читай причину, исправляй, отправь отчет повторно.\n      - Если QA одобрил -> задача закроется.\n   f. **БАТЧ СЧЁТЧИК:** Увеличь `tasksInBatch++`.\n   g. **ПРОВЕРКА БАТЧА:** Если `tasksInBatch >= 5`:\n      Напиши:\n      `🛑 БАТЧ ИЗ 5 ЗАДАЧ ВЫПОЛНЕН.\n\n✅ Контекст чата переполнен - время сброса.\n\n📝 ПОЖАЛУСТА, НАЧНИТЕ НОВЫЙ ЧАТ и снова запустите `@orchestrator autopilot`.\n\nЭто защитит от галлюцинаций и гарантирует качество работы.`\n      СТОП. Не продолжай.\n   h. **РЕКУРСИЯ:** Если `tasksInBatch < 5` -> переходи к шагу 2.\n\n⚠️ QA АГЕНТ СТРОГИЙ! Не отправляй отчеты без доказательств.\n\n⚠️ ВАЖНО: Счётчик задач в батче нужен для защиты от переполнения контекста.\n\nНачинай!"
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator task_status <TASK_ID> <STATUS>"
+      },
+      "then": {
+        "response": "Обновляю статус задачи... Выполняю: `curl -s -X POST -H \"Content-Type: application/json\" -d '{\"action\":\"update_task_status\",\"taskId\":\"<TASK_ID>\",\"status\":\"<STATUS>\"}' \"http://127.0.0.1:3002/api/ide\"`\n\nДоступные статусы: TODO, IN_PROGRESS, REVIEW, DONE"
+      }
+    },
+    {
+      "when": {
+        "command": "orchestrator setup"
+      },
+      "then": {
+        "response": "🔧 Установка синхронизатора:\n\n1. Установи зависимости:\n   `npm install chokidar`\n\n2. Запуши Project ID в .orchestrator:\n   `echo \"projectId=YOUR_PROJECT_ID\" > .orchestrator`\n\n3. Запусти клиент:\n   `node sync-client.js`\n\n   Или используй скрипт:\n   `node sync-init.js`\n\n✅ Клиент начнет мониторинг файлов и синхронизацию с сервером."
+      }
+    }
+  ]
+}

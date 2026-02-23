@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Buttons</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Легкий фон для контраста */
+            font-family: sans-serif;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid #ff4500; /* Граница для видимости */
+            border-radius: 8px;
+            background-color: white; /* Фон кнопки для непрозрачности */
+            /* Градиентный текст согласно новому требованию */
+            background-image: linear-gradient(to right, red, yellow);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="btn-container">
+        <button id="send-btn">Отправить</button>
+        <button id="cancel-btn">Отменить</button>
+    </div>
+
+    <script>
+        document.getElementById('send-btn').addEventListener('click', () => {
+            console.log('Sending data...');
+            alert('Данные отправлены!');
+        });
+
+        document.getElementById('cancel-btn').addEventListener('click', () => {
+            console.log('Action cancelled');
+            alert('Действие отменено');
+        });
+    </script>
+
+</body>
+</html>

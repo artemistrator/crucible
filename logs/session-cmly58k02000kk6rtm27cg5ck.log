@@ -1,0 +1,194 @@
+[2026-02-22T19:32:33.851Z] [INFO] [AHP] Dispatcher started
+[2026-02-22T19:32:39.782Z] [INFO] [AHP] Initialized workspace: /app/projects/cmly522wo0001k6rt7ouwxk08
+[2026-02-22T19:32:39.923Z] [INFO] [AHP] Iteration 1/500
+[2026-02-22T19:32:40.345Z] [INFO] [AHP] Found 0 pending/processing messages
+[2026-02-22T19:32:40.379Z] [INFO] [AHP] No pending messages, finding next task...
+[2026-02-22T19:32:40.519Z] [INFO] [AHP] Found next task: cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:32:40.720Z] [INFO] 
+📨 [TEAMLEAD] -> @DEVOPS: Отправил TASK_REQUEST (Task: cmly54m8s000ak6rte6hnjqjn)
+[2026-02-22T19:32:40.838Z] [INFO] [AHP] Created TASK_REQUEST for task cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:32:40.901Z] [INFO] [AHP] Iteration 2/500
+[2026-02-22T19:32:41.021Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:32:41.028Z] [INFO] [AHP] Active agents: DEVOPS
+[2026-02-22T19:32:41.031Z] [INFO] [AHP] Creating agent for role: DEVOPS
+[2026-02-22T19:32:41.037Z] [INFO] [AHP] Running DEVOPS agent...
+[2026-02-22T19:32:41.888Z] [INFO] [DEVOPS] Processing 1 messages
+[2026-02-22T19:32:42.554Z] [INFO] [DEVOPS] Processing message: TASK_REQUEST
+[2026-02-22T19:32:42.588Z] [INFO] [DEVOPS] Processing task: cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:32:42.888Z] [INFO] 
+👷 [TASK_EXECUTOR] -> @TEAM: "Принял задачу 'Инициализация проекта и настройка окружения'. Ушел генерировать план и кодить."
+[2026-02-22T19:32:42.903Z] [INFO] [DEVOPS] Generating detailed prompt for task cmly54m8s000ak6rte6hnjqjn...
+[2026-02-22T19:33:05.984Z] [INFO] [DEVOPS] Generating execution plan for task: Инициализация проекта и настройка окружения
+[2026-02-22T19:33:20.351Z] [INFO] [DEVOPS] Plan generated. 8 steps to perform.
+[2026-02-22T19:33:20.356Z] [INFO] [DEVOPS] 🧠 The project requires initialization. First, I will create the package.json file with the correct configuration including 'type': 'module', metadata, and the necessary scripts for starting and developing the application.
+[2026-02-22T19:33:20.360Z] [INFO] [DEVOPS] 🛠️ Executing: writeFile
+[2026-02-22T19:33:23.026Z] [INFO] [DEVOPS] ✅ writeFile completed
+[2026-02-22T19:33:23.077Z] [INFO] [DEVOPS] 🧠 With package.json created, I need to install the defined dependencies (axios, yargs) and devDependencies (nodemon) to set up the environment.
+[2026-02-22T19:33:23.088Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:33:39.532Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:33:39.560Z] [INFO] [DEVOPS] 🧠 Now I will create the entry point file index.js with the initialization stub message to verify the environment is working.
+[2026-02-22T19:33:39.578Z] [INFO] [DEVOPS] 🛠️ Executing: writeFile
+[2026-02-22T19:33:45.288Z] [INFO] [DEVOPS] ✅ writeFile completed
+[2026-02-22T19:33:45.307Z] [INFO] [DEVOPS] 🧠 Finally, I will run the development script to verify that the application starts correctly and nodemon is active.
+[2026-02-22T19:33:45.309Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:33:46.519Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:33:46.527Z] [INFO] [DEVOPS] 🔍 Verification phase: running automatedCheck and artifact checks...
+[2026-02-22T19:33:46.539Z] [INFO] [DEVOPS][Verification] Running: cat << 'AI_VERIFY_SCRIPT_END_7f3a' > .ai-temp-check.sh
+npm list axios yargs nodemon
+AI_VERIFY_SCRIPT_END_7f3a
+sh .ai-temp-check.sh
+[2026-02-22T19:33:50.182Z] [INFO] [DEVOPS][Verification] Running: ls -la "package.json"
+[2026-02-22T19:33:50.325Z] [INFO] [DEVOPS][Verification] Running: head -n 200 "package.json"
+[2026-02-22T19:33:50.343Z] [INFO] 
+📨 [DEVOPS] -> @QA: Отправил QA_REQUEST (Task: cmly54m8s000ak6rte6hnjqjn)
+[2026-02-22T19:33:50.390Z] [INFO] [DEVOPS] Created report comment for task cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:33:50.397Z] [INFO] 
+📤 [TASK_EXECUTOR] -> @QA: "Я закончил писать код. Отправил тебе на ревью (QA_REQUEST)."
+[2026-02-22T19:33:50.442Z] [INFO] [DEVOPS] Sent QA_REQUEST for task cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:33:50.446Z] [INFO] [AHP] DEVOPS agent completed
+[2026-02-22T19:33:50.486Z] [INFO] [DEVOPS] Message processed: TASK_REQUEST
+[2026-02-22T19:33:51.775Z] [INFO] [AHP] Iteration 3/500
+[2026-02-22T19:33:52.005Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:33:52.086Z] [INFO] [AHP] Active agents: QA
+[2026-02-22T19:33:52.101Z] [INFO] [AHP] Creating agent for role: QA
+[2026-02-22T19:33:52.105Z] [INFO] [AHP] Running QA agent...
+[2026-02-22T19:33:52.256Z] [INFO] [QA] Processing 1 messages
+[2026-02-22T19:33:52.503Z] [INFO] 
+🧐 [QA] -> @TASK_EXECUTOR: "Взял твой код на проверку. Сейчас посмотрим, что ты там написал..."
+[2026-02-22T19:33:52.541Z] [INFO] [QA] Verifying task cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:33:52.601Z] [INFO] [QA] Processing message: QA_REQUEST
+[2026-02-22T19:34:46.247Z] [INFO] 
+📨 [QA] -> @TEAMLEAD: Отправил QA_RESPONSE (Task: cmly54m8s000ak6rte6hnjqjn)
+[2026-02-22T19:34:46.451Z] [INFO] 
+🛑 [QA] -> @TEAMLEAD: "Код не прошел проверку! Причина: Verification Failed. Missing evidence for:
+
+[automatedCheck] npm list axios yargs nodemon failed with exit code 1 and shows empty dependencies tree. The command output displays:
+- `-- (empty)`
+
+This i…. Возвращаю."
+[2026-02-22T19:34:46.784Z] [INFO] [QA] Task cmly54m8s000ak6rte6hnjqjn verification result: REJECTED
+[2026-02-22T19:34:46.795Z] [INFO] [AHP] QA agent completed
+[2026-02-22T19:34:46.831Z] [INFO] [QA] Message processed: QA_REQUEST
+[2026-02-22T19:34:48.424Z] [INFO] [AHP] Iteration 4/500
+[2026-02-22T19:34:48.715Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:34:48.717Z] [INFO] [AHP] Active agents: TEAMLEAD
+[2026-02-22T19:34:48.720Z] [INFO] [AHP] Creating agent for role: TEAMLEAD
+[2026-02-22T19:34:48.722Z] [INFO] [AHP] Running TEAMLEAD agent...
+[2026-02-22T19:34:48.859Z] [INFO] [TEAMLEAD] Processing 1 messages
+[2026-02-22T19:34:48.942Z] [INFO] [TEAMLEAD] Processing message: QA_RESPONSE
+[2026-02-22T19:34:48.964Z] [INFO] [TeamLead] QA result for task cmly54m8s000ak6rte6hnjqjn: REJECTED
+[2026-02-22T19:34:49.477Z] [INFO] 
+⚠️ [TEAMLEAD] -> @TASK_EXECUTOR: "QA завернул твой код. Я создал баг-тикет. Бросай всё и иди чинить!"
+[2026-02-22T19:34:49.501Z] [INFO] [TeamLead] Created fixing ticket for rejected task cmly54m8s000ak6rte6hnjqjn
+[2026-02-22T19:34:49.513Z] [INFO] [AHP] TEAMLEAD agent completed
+[2026-02-22T19:34:49.563Z] [INFO] [TEAMLEAD] Message processed: QA_RESPONSE
+[2026-02-22T19:34:50.608Z] [INFO] [AHP] Iteration 5/500
+[2026-02-22T19:34:51.191Z] [INFO] [AHP] Found 0 pending/processing messages
+[2026-02-22T19:34:51.192Z] [INFO] [AHP] No pending messages, finding next task...
+[2026-02-22T19:34:51.282Z] [INFO] [AHP] Found next ticket: cmly5cwlo007ek6rtabxz1s6e
+[2026-02-22T19:34:51.445Z] [INFO] 
+📨 [TEAMLEAD] -> @DEVOPS: Отправил TICKET_REQUEST (Task: —)
+[2026-02-22T19:34:51.514Z] [INFO] [AHP] Created TICKET_REQUEST for ticket cmly5cwlo007ek6rtabxz1s6e
+[2026-02-22T19:34:51.564Z] [INFO] [AHP] Iteration 6/500
+[2026-02-22T19:34:51.709Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:34:51.748Z] [INFO] [AHP] Active agents: DEVOPS
+[2026-02-22T19:34:51.759Z] [INFO] [AHP] Creating agent for role: DEVOPS
+[2026-02-22T19:34:51.762Z] [INFO] [AHP] Running DEVOPS agent...
+[2026-02-22T19:34:51.868Z] [INFO] [DEVOPS] Processing 1 messages
+[2026-02-22T19:34:51.899Z] [INFO] [DEVOPS] Processing message: TICKET_REQUEST
+[2026-02-22T19:34:51.911Z] [INFO] [DEVOPS] Processing ticket: cmly5cwlo007ek6rtabxz1s6e
+[2026-02-22T19:34:52.045Z] [INFO] 
+🔧 [TASK_EXECUTOR] -> @QA: "Вижу твои замечания по тикету. Извиняюсь, сейчас всё исправлю."
+[2026-02-22T19:34:52.047Z] [INFO] [DEVOPS] Regenerating prompt for task cmly54m8s000ak6rte6hnjqjn based on ticket cmly5cwlo007ek6rtabxz1s6e...
+[2026-02-22T19:35:02.584Z] [INFO] [DEVOPS] Generating execution plan for ticket cmly5cwlo007ek6rtabxz1s6e (task: Инициализация проекта и настройка окружения)
+[2026-02-22T19:35:09.999Z] [INFO] [DEVOPS] Ticket plan generated. 16 steps to perform.
+[2026-02-22T19:35:10.001Z] [INFO] [DEVOPS] 🧠 First, I need to check the current state of the project directory to see if a package.json already exists or if the directory is empty.
+[2026-02-22T19:35:10.006Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:35:10.208Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:35:10.234Z] [INFO] [DEVOPS] 🧠 Initialize the Node.js project. This will create a package.json file with default values.
+[2026-02-22T19:35:10.245Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:35:21.152Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:35:21.154Z] [INFO] [DEVOPS] 🧠 Read the generated package.json to see its current content before modifying it.
+[2026-02-22T19:35:21.155Z] [INFO] [DEVOPS] 🛠️ Executing: readFile
+[2026-02-22T19:35:21.188Z] [INFO] [DEVOPS] ✅ readFile completed
+[2026-02-22T19:35:21.190Z] [INFO] [DEVOPS] 🧠 Now I will update the package.json with the correct name, description, and scripts as requested. I will write the complete file content.
+[2026-02-22T19:35:21.191Z] [INFO] [DEVOPS] 🛠️ Executing: writeFile
+[2026-02-22T19:35:22.692Z] [INFO] [DEVOPS] ✅ writeFile completed
+[2026-02-22T19:35:22.694Z] [INFO] [DEVOPS] 🧠 Install production dependencies (axios and yargs). Using standard npm install to ensure they are correctly added to dependencies and node_modules is populated.
+[2026-02-22T19:35:22.698Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:35:54.145Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:35:54.148Z] [INFO] [DEVOPS] 🧠 Install development dependency (nodemon) for hot-reloading.
+[2026-02-22T19:35:54.172Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:36:23.311Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:36:23.314Z] [INFO] [DEVOPS] 🧠 Verify that the dependencies were installed correctly by checking the list for axios, yargs, and nodemon.
+[2026-02-22T19:36:23.345Z] [INFO] [DEVOPS] 🛠️ Executing: executeCommand
+[2026-02-22T19:36:42.654Z] [INFO] [DEVOPS] ✅ executeCommand completed
+[2026-02-22T19:36:42.663Z] [INFO] [DEVOPS] 🧠 Read the final package.json to confirm it includes the installed dependencies and scripts.
+[2026-02-22T19:36:42.665Z] [INFO] [DEVOPS] 🛠️ Executing: readFile
+[2026-02-22T19:36:43.253Z] [INFO] [DEVOPS] ✅ readFile completed
+[2026-02-22T19:36:43.267Z] [INFO] [DEVOPS] 🔍 Verification phase (ticket run: artifact checks only)...
+[2026-02-22T19:36:43.269Z] [INFO] [DEVOPS][Verification] Running: ls -la "package.json"
+[2026-02-22T19:36:43.271Z] [INFO] [DEVOPS][Verification] Running: head -n 200 "package.json"
+[2026-02-22T19:36:43.370Z] [INFO] 
+📨 [DEVOPS] -> @QA: Отправил QA_REQUEST (Task: cmly54m8s000ak6rte6hnjqjn)
+[2026-02-22T19:36:43.437Z] [INFO] 
+📤 [TASK_EXECUTOR] -> @QA: "Я закончил писать код. Отправил тебе на ревью (QA_REQUEST)."
+[2026-02-22T19:36:43.501Z] [INFO] [DEVOPS] Created report comment for ticket cmly5cwlo007ek6rtabxz1s6e
+[2026-02-22T19:36:43.550Z] [INFO] [DEVOPS] Sent QA_REQUEST for ticket cmly5cwlo007ek6rtabxz1s6e (task cmly54m8s000ak6rte6hnjqjn); ticket status will be set by QA result
+[2026-02-22T19:36:43.554Z] [INFO] [AHP] DEVOPS agent completed
+[2026-02-22T19:36:43.682Z] [INFO] [DEVOPS] Message processed: TICKET_REQUEST
+[2026-02-22T19:36:44.963Z] [INFO] [AHP] Iteration 7/500
+[2026-02-22T19:36:45.151Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:36:45.154Z] [INFO] [AHP] Active agents: QA
+[2026-02-22T19:36:45.163Z] [INFO] [AHP] Creating agent for role: QA
+[2026-02-22T19:36:45.166Z] [INFO] [AHP] Running QA agent...
+[2026-02-22T19:36:45.480Z] [INFO] [QA] Processing 1 messages
+[2026-02-22T19:36:45.576Z] [INFO] [QA] Processing message: QA_REQUEST
+[2026-02-22T19:36:45.604Z] [INFO] 
+🧐 [QA] -> @TASK_EXECUTOR: "Взял твой код на проверку. Сейчас посмотрим, что ты там написал..."
+[2026-02-22T19:36:45.609Z] [INFO] [QA] Verifying task cmly54m8s000ak6rte6hnjqjn (ticket cmly5cwlo007ek6rtabxz1s6e)
+[2026-02-22T19:37:11.809Z] [INFO] 
+📨 [QA] -> @TEAMLEAD: Отправил QA_RESPONSE (Task: cmly54m8s000ak6rte6hnjqjn)
+[2026-02-22T19:37:12.076Z] [INFO] 
+✅ [QA] -> @TEAMLEAD: "Проверил, всё работает как часы. Апрув."
+[2026-02-22T19:37:12.938Z] [INFO] [QA] Task cmly54m8s000ak6rte6hnjqjn verification result: DONE
+[2026-02-22T19:37:12.949Z] [INFO] [AHP] QA agent completed
+[2026-02-22T19:37:13.021Z] [INFO] [QA] Message processed: QA_REQUEST
+[2026-02-22T19:37:34.193Z] [INFO] [AHP] Iteration 8/500
+[2026-02-22T19:37:53.236Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:37:53.260Z] [INFO] [AHP] Active agents: TEAMLEAD
+[2026-02-22T19:37:53.277Z] [INFO] [AHP] Creating agent for role: TEAMLEAD
+[2026-02-22T19:37:53.283Z] [INFO] [AHP] Running TEAMLEAD agent...
+[2026-02-22T19:37:58.740Z] [INFO] [TEAMLEAD] Processing 1 messages
+[2026-02-22T19:37:58.852Z] [INFO] [TEAMLEAD] Processing message: QA_RESPONSE
+[2026-02-22T19:37:58.853Z] [INFO] [TeamLead] QA result for task cmly54m8s000ak6rte6hnjqjn: DONE (ticket cmly5cwlo007ek6rtabxz1s6e)
+[2026-02-22T19:37:58.923Z] [INFO] 
+🎉 [TEAMLEAD] -> @ALL: "Отличная работа! QA принял задачу. Иду за следующей..."
+[2026-02-22T19:37:58.925Z] [INFO] [TeamLead] Updated ticket cmly5cwlo007ek6rtabxz1s6e status to DONE (from QA)
+[2026-02-22T19:37:58.930Z] [INFO] [AHP] TEAMLEAD agent completed
+[2026-02-22T19:37:59.053Z] [INFO] [TEAMLEAD] Message processed: QA_RESPONSE
+[2026-02-22T19:38:00.143Z] [INFO] [AHP] Iteration 9/500
+[2026-02-22T19:38:00.835Z] [INFO] [AHP] Found 0 pending/processing messages
+[2026-02-22T19:38:00.837Z] [INFO] [AHP] No pending messages, finding next task...
+[2026-02-22T19:38:01.119Z] [INFO] [AHP] Found next task: cmly54m8s000ck6rtmity36oq
+[2026-02-22T19:38:01.253Z] [INFO] 
+📨 [TEAMLEAD] -> @BACKEND: Отправил TASK_REQUEST (Task: cmly54m8s000ck6rtmity36oq)
+[2026-02-22T19:38:01.353Z] [INFO] [AHP] Created TASK_REQUEST for task cmly54m8s000ck6rtmity36oq
+[2026-02-22T19:38:01.468Z] [INFO] [AHP] Iteration 10/500
+[2026-02-22T19:38:01.818Z] [INFO] [AHP] Found 1 pending/processing messages
+[2026-02-22T19:38:01.819Z] [INFO] [AHP] Active agents: BACKEND
+[2026-02-22T19:38:01.820Z] [INFO] [AHP] Creating agent for role: BACKEND
+[2026-02-22T19:38:01.820Z] [INFO] [AHP] Running BACKEND agent...
+[2026-02-22T19:38:02.152Z] [INFO] [BACKEND] Processing 1 messages
+[2026-02-22T19:38:02.254Z] [INFO] [BACKEND] Processing message: TASK_REQUEST
+[2026-02-22T19:38:02.255Z] [INFO] [BACKEND] Processing task: cmly54m8s000ck6rtmity36oq
+[2026-02-22T19:38:02.440Z] [INFO] 
+👷 [TASK_EXECUTOR] -> @TEAM: "Принял задачу 'Реализация CLI утилиты для получения погоды'. Ушел генерировать план и кодить."
+[2026-02-22T19:38:02.441Z] [INFO] [BACKEND] Generating detailed prompt for task cmly54m8s000ck6rtmity36oq...
+[2026-02-22T19:38:23.072Z] [INFO] [BACKEND] Generating execution plan for task: Реализация CLI утилиты для получения погоды
+[2026-02-22T19:38:23.416Z] [ERROR] LLM call failed: fetch failed
+[2026-02-22T19:38:23.417Z] [ERROR] [BACKEND] Failed to process message: LLM call failed: fetch failed
+[2026-02-22T19:38:23.417Z] [INFO] [AHP] BACKEND agent completed
+[2026-02-22T19:38:24.775Z] [INFO] [AHP] Iteration 11/500
+[2026-02-22T19:38:25.024Z] [INFO] [AHP] Session stopping: No more tasks to process
+[2026-02-22T19:38:25.026Z] [INFO] [AHP] Finalizing session. Reason: No more tasks to process

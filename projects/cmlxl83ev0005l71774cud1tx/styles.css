@@ -1,0 +1,95 @@
+:root {
+    --bg-color: #f4f5f7;
+    --column-bg: #ebecf0;
+    --card-bg: #ffffff;
+    --primary-color: #0079bf;
+    --text-color: #172b4d;
+    --gap: 16px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden; /* Prevent body scroll, handle in columns */
+}
+
+.board-container {
+    display: flex;
+    height: 100%;
+    padding: var(--gap);
+    gap: var(--gap);
+    overflow-x: auto;
+}
+
+.column {
+    flex: 1;
+    min-width: 280px; /* Ensure minimum width on desktop */
+    background-color: var(--column-bg);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.column h2 {
+    padding: 8px;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: var(--gap);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    cursor: grab;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.card p {
+    font-size: 0.85rem;
+    color: #5e6c84;
+}
+
+/* Dragging visual state */
+.card.dragging {
+    opacity: 0.5;
+    background-color: #e0e0e0;
+}
+
+/* Mobile-first default is vertical, but we set flex-direction row on desktop via media query */
+@media (min-width: 769px) {
+    .board-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 768px) {
+    .board-container {
+        flex-direction: column;
+        overflow-y: auto; /* Scroll vertically on mobile */
+    }
+    
+    .column {
+        min-height: 200px; /* Explicit height for drop zones on mobile */
+    }
+}
