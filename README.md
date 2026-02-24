@@ -6,6 +6,99 @@ AI Orchestrator decomposes ideas into tasks, manages projects using AI agents, i
 
 ---
 
+## Recent Changes (last 2 days)
+
+- **New API health endpoint**: Added `GET /api/hello` (`app/api/hello/route.ts`) that returns JSON `{ "message": "Hello from AI Orchestrator!" }`. Used for quick sanity checks via browser and `curl`, and for automated verification in orchestrator-driven workflows.
+- **Extended internal documentation**: Added `docs/new_readme.md` with a deeply detailed description of:
+  - Prisma schema (projects, plans, tasks, dependencies, execution sessions, message bus, RAG entities, billing, etc.)
+  - Agent roles, message types, and execution flow (AHP vs legacy execution)
+  - RAG pipeline, semantic search, and GlobalInsights memory
+  - Tech stack tables for frontend, backend, database, AI providers, and tooling.
+
+---
+
+## Technical passport (v1.0 Demo)
+
+This section summarizes the v1.0 refactor: **reliable QA (Hard Evidence), Docker DooD isolation, pgvector RAG, OpenVDL (vibe.yaml), RCA retries, AHP dispatcher rules, and safeguards.** Use as the main context for further development.
+
+### 1. Reliable QA (Hard Evidence)
+
+- **Mechanism**: QA no longer relies on fragile string matching ("PASS", "✓") in reports. Evidence is structured and checked explicitly.
+- **Executor side** (`lib/agents/task-executor-agent.ts`, `lib/agents/execution-agent.ts`): Before sending the report to QA, the executor runs **verification steps** from `verificationCriteria`:
+  - For each path in `artifacts`, it runs `ls -la <path>` and `cat <path>` (or equivalent) and appends the output to the report.
+  - It runs the `automatedCheck` command and appends stdout/stderr.
+  - This "Artifacts Check" and "automatedCheck" output is injected into the report so QA has **concrete evidence** (file existence, command exit codes, logs).
+- **QA side** (`lib/agents/qa.ts`): Two-phase verification:
+  - **Hard gates (code)**: Verification criteria are read from the task (`artifacts`, `automatedCheck`, `manualCheck`). The prompt instructs the model to look for **evidence per criterion** (e.g. `ls -la` output, test logs, build success). Missing evidence → REJECT with a clear "Missing evidence for: ..." message.
+  - **Soft gates (LLM)**: Semantic check of code and reasoning; JSON response is parsed via `extractJsonFromText` (fenced blocks or first `{` to last `}`), then validated with `qaVerificationSchema` (status APPROVED/REJECTED, reasoning, confidence). Low-confidence REJECT can trigger a second opinion.
+
+### 2. Isolation and safety (Docker DooD)
+
+- **Mechanism**: **Docker-out-of-Docker (DooD)**. Each execution session runs in its own **temporary container**; host project code is bind-mounted.
+- **Implementation** (`lib/execution/container-manager.ts`):
+  - `ensureContainer(sessionId, projectPath)` — creates a long-lived container (e.g. `node:20-slim`) named `ai-orch-session-<sessionId>`, with `tail -f /dev/null`, mount `hostProjectPath:/app/project`, and user `HOST_UID:HOST_GID` so files are owned by the host user (no root-hell).
+  - `executeInContainer(sessionId, command, timeoutMs)` — runs `docker exec` with a **5-minute default timeout**; on timeout throws; returns `{ stdout, stderr, exitCode }`.
+  - `destroyContainer(sessionId)` — `docker rm -f` the session container.
+  - Host paths are resolved via `HOST_PROJECTS_DIR`; internal paths like `/app/projects/...` are translated to `HOST_PROJECTS_DIR/...`.
+- **Env**: `HOST_PROJECTS_DIR`, `HOST_UID`, `HOST_GID` are read from `.env` for portability (Mac/Linux).
+- **Garbage collection** (`instrumentation.ts`): On Next.js startup (Node runtime), `cleanupOrphanedContainers()` is called: finds all containers with names starting with `ai-orch-session-` and removes them so old sessions do not leave stale containers.
+
+### 3. Fast RAG (pgvector)
+
+- **Optimization**: Similarity is computed **inside PostgreSQL** with pgvector (`<=>` operator), not in JavaScript loops.
+- **APIs** (`lib/rag/search.ts`):
+  - `searchGlobalInsights(query, limit)` — semantic search over `GlobalInsight` (historical lessons); used by decompose-idea and generate-tasks to inject past insights into prompts.
+  - `searchSimilar` / project-scoped search — used by the **searchCodebase** tool.
+- **Agent tools** (`lib/agents/tools.ts`):
+  - **searchCodebase** (`createSearchCodebaseTool`): Embeds the query, runs a raw SQL query over `FileEmbedding` joined with `ProjectFile` (filter `similarity > 0.4`), returns `{ filePath, content, similarity }`.
+  - **getCodeMap** (`createGetCodeMapTool`): Returns a **structural map** of the project: file paths + code entities (classes, functions, etc.) from the `CodeEntity` table — no file bodies, so the agent can "see" the skeleton of the codebase without reading full files.
+
+### 4. OpenVDL (vibe.yaml)
+
+- **Mechanism**: Project **"genetic code"**. Agents automatically receive rules from a config file in the project root.
+- **Implementation**:
+  - **Parser** (`lib/vibe/parser.ts`): `loadProjectVibe(projectId)` reads `vibe.yaml` or `vibe.json` from the project directory (via `getProjectDir`), parses with `yaml.parse` or `JSON.parse`; returns `VibeConfig | null`; never throws (missing file → null).
+  - **Schema** (`lib/vibe/types.ts`): `VibeConfig` includes `architecture` (preferred_pattern, forbidden_patterns), `code_style` (naming, error_handling), `testing` (framework, require_for), `qa_rules` (mandatory_evidence, strict_guidelines).
+  - **Injection** (`lib/agents/prompt-generator.ts`): When generating the task prompt, `loadProjectVibe(project.id)` is called; if present, a **vibe section** is built (preferred pattern, forbidden patterns, naming, error handling, testing framework, QA rules) and appended to the system prompt so the executor follows architecture and QA standards without extra instructions in the task text.
+
+### 5. Smart retries (RCA)
+
+- **Mechanism**: **Root Cause Analysis (RCA)**. On ticket (fix-after-reject) runs, the executor must **first** output a thought step that explains why the previous attempt failed and what will change.
+- **Implementation** (`lib/agents/task-executor-agent.ts`): For `TICKET_REQUEST`, the system prompt includes a strict rule: the **first** element of the `steps` array **must** be a **thought-only** step (no `toolName`), containing the RCA. The prompt says: "Your VERY FIRST element in the 'steps' array MUST be a thought-only step ... that performs a Root Cause Analysis (RCA) of the previous failed attempt" and "Do NOT use any tools until you have outputted this RCA thought." The agent logs these thoughts; this reduces repeated identical failures.
+
+### 6. AHP dispatcher stability
+
+- **Dependencies** (`lib/execution/agent-factory.ts`, `lib/agents/team-lead-agent.ts`): The next runnable task is chosen with Prisma: `dependencies: { every: { dependsOn: { status: "DONE" } } }`. So a task is only run when **all** its `dependsOn` tasks are DONE.
+- **Strict finalization** (`app/api/execution-sessions/run-ahp/route.ts`, `lib/execution/agent-factory.ts`): The session is considered complete only when **all** plan tasks have status DONE (and no OPEN tickets). `isSessionComplete()` checks `planTasks.every(t => t.status === "DONE")` and no pending messages.
+- **Robust parsing**: In the task executor, the LLM plan response is normalized with a regex to extract a single JSON object: `planJsonText.replace(/^[\s\S]*?(\{[\s\S]*\})[\s\S]*$/m, "$1")`. If parsing or validation fails (e.g. invalid JSON or empty steps), the **ticket** is set to REJECTED and a **system comment** is created with the error message (`createTicketRejectionComment`), so the run does not hang and the user sees a clear reason.
+
+### 7. Safeguards
+
+- **Timeouts**: Every command run in the session container uses `executeInContainer(..., timeoutMs)` with a default of **5 minutes** (`DEFAULT_COMMAND_TIMEOUT_MS` in `container-manager.ts`). On timeout, an `AbortError` is thrown and the command result is treated as failed.
+- **Garbage collection**: See §2 — `cleanupOrphanedContainers()` in `instrumentation.ts` on app startup.
+
+### Key files (v1.0)
+
+| Area | File | Role |
+|------|------|------|
+| Isolation | `lib/execution/container-manager.ts` | DooD: ensureContainer, executeInContainer, destroyContainer, cleanupOrphanedContainers |
+| Vibe | `lib/vibe/parser.ts`, `lib/vibe/types.ts` | Load and type vibe.yaml / vibe.json |
+| Prompts | `lib/agents/prompt-generator.ts` | Vibe injection + dependency context; RCA is in task-executor prompt |
+| Tools | `lib/agents/tools.ts` | searchCodebase, getCodeMap, patchFile (local + cloud), readFile, executeCommand, etc. |
+| Startup | `instrumentation.ts` | Calls cleanupOrphanedContainers on Node startup |
+| QA | `lib/agents/qa.ts` | Hard/soft gates, extractJsonFromText, qaVerificationSchema |
+| Executor | `lib/agents/task-executor-agent.ts` | Verification phase (artifacts + automatedCheck), RCA for tickets, regex plan extraction, REJECTED + comment on parse failure |
+| Dispatcher | `lib/execution/agent-factory.ts`, `app/api/execution-sessions/run-ahp/route.ts` | Dependencies filter, all-DONE finalization |
+
+### Planned next (v1.1)
+
+- **patchFile**: Encourage agents to use it for edits instead of full-file rewrites.
+- **Frontend**: SSE for real-time logs in ExecutionConsole; fix task status sync on tiles.
+- **Reflexologist 2.0**: Auto-append new lessons to the project’s `vibe.yaml` after a session.
+- **Folder trap**: Adjust init prompt so `create-next-app` does not create an extra subfolder, or agent moves files to the intended root.
+
+---
+
 ## Tech Stack
 
 | Layer | Technologies |
@@ -370,6 +463,27 @@ ai-orchestrator/
 
 ---
 
+## Semantic Code Search (`searchCodebase`)
+
+AI Orchestrator maintains a semantic index of your synced project files:
+
+- The **sync client** (`public/sync-client.js` or project-local `.orchestrator/sync-client.js`) watches your workspace and sends file updates to the API.
+- The `/api/sync` endpoint stores/updates `ProjectFile` records and runs the RAG pipeline (`processFile`) to create/update `FileEmbedding` rows in PostgreSQL with pgvector.
+- Each file is chunked and embedded; chunks are stored with their source `ProjectFile`.
+
+The TASK_EXECUTOR agent can call the `searchCodebase` tool to perform **semantic search across the entire codebase**:
+
+- It generates an embedding for the natural-language query.
+- It runs a pgvector similarity query over `FileEmbedding` joined with `ProjectFile`, scoped to the current `projectId`.
+- It returns the most relevant chunks as `{ filePath, content, similarity }`, filtered to `similarity > 0.4` and sorted by similarity (highest first).
+
+Operational requirements:
+
+- `DATABASE_URL` must point to PostgreSQL with the `pgvector` extension enabled.
+- The `FileEmbedding` and `GlobalInsight` tables must have an `embedding` column compatible with pgvector similarity operators (`<=>`).
+
+---
+
 ## Architecture
 
 ```
@@ -446,6 +560,8 @@ MIT
 **AI-система управления проектами и автоматизации разработки, превращающая идеи в структурированные планы.**
 
 AI Orchestrator декомпозирует идеи в задачи, управляет проектами с помощью AI-агентов, использует RAG для управления контекстом, предоставляет возможности веб-поиска и обучается на прошлых проектах. Включает режим автоматического выполнения задач.
+
+**Технический паспорт v1.0** (надёжное ядро QA, Docker DooD, pgvector RAG, vibe.yaml, RCA-ретраи, AHP-диспетчер, таймауты и очистка контейнеров) описан выше в разделе [Technical passport (v1.0 Demo)](#technical-passport-v10-demo).
 
 ---
 
